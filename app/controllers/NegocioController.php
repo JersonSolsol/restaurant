@@ -8,10 +8,16 @@
 
 require 'app/models/Negocio.php';
 require 'app/models/Ciudad.php';
+require 'app/models/User.php';
+require 'app/models/Role.php';
 class NegocioController{
     private $log;
     private $turn;
     private $menu;
+    private $negocio;
+    private $ciudad;
+    private $rol;
+    private $usuario;
     private $crypt;
     private $nav;
 
@@ -20,6 +26,8 @@ class NegocioController{
         $this->log = new Log();
         $this->negocio = new Negocio();
         $this->ciudad = new Ciudad();
+        $this->usuario = new User();
+        $this->rol = new Role();
         $this->crypt = new Crypt();
     }
 
@@ -134,6 +142,8 @@ class NegocioController{
             }
             $_SESSION['id_gestionar'] = $id;
             $negocio = $this->negocio->listgestionar($id);
+            $usuario = $this->usuario->listarUsuario();
+            $rol = $this->rol->listarRol();
             require _VIEW_PATH_ . 'header.php';
             require _VIEW_PATH_ . 'navbar.php';
 
@@ -145,6 +155,23 @@ class NegocioController{
             echo "<script language=\"javascript\">window.location.href=\"". _SERVER_ ."\";</script>";
         }
     }
+
+    public function saveRoleUser(){
+        try{
+            $model = new Negocio();
+            $model->id_negocio = $_POST['id'];
+            $model->id_user= $_POST['user'];
+            $model->id_rol = $_POST['role'];
+            $model->negocio_user_datetime = date('Y-m-d H:i:s');
+            $model->negocio_user_estado = 1;
+            $result = $this->negocio->saveRoleUser($model);
+        } catch (Exception $e){
+            $this->log->insert($e->getMessage(), get_class($this).'|'.__FUNCTION__);
+            $result = 2;
+        }
+        echo $result;
+    }
+
 }   
 
 

@@ -7,7 +7,7 @@
  */
 
 // Definicion Variables Globales
-define('_SERVER_', 'http://localhost:8081/bufeosale-e/');
+define('_SERVER_', 'http://localhost:8081/restaurant/');
 define('_STYLES_', 'styles/');
 define('_LOGIN_STYLES_', 'styles/login/');
 define('_VIEW_PATH_', 'app/view/');

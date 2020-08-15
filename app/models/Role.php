@@ -313,4 +313,20 @@ class Role{
         return $result;
     }
 
+    //Listar rol
+
+    public function listarRol(){
+        try{
+            $sql = 'select * from role';
+            $stm = $this->pdo->prepare($sql);
+            $stm->execute([]);
+            $result = $stm->fetchAll();
+
+        } catch (Exception $e){
+            $this->log->insert($e->getMessage(), get_class($this).'|'.__FUNCTION__);
+            $result = [];
+        }
+        return $result;
+    }
+
 }

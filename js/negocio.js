@@ -100,3 +100,55 @@ function deleter(id){
         }
     });
 }
+
+function saveRoleUser() {
+    var valor = "correcto";
+    var user = $('#id_user').val();
+    var role = $('#id_rol').val();
+    var id = $('#id_negocio').val();
+
+
+    if(user == ""){
+        alertify.error('El campo Usuario no fue seleccionado');
+        $('#id_user').css('border','solid red');
+        valor = "incorrecto";
+    } else {
+        $('#id_user').css('border','');
+    }
+
+    if(role == ""){
+        alertify.error('El campo del Rol no fue seleccionado');
+        $('#id_rol').css('border','solid red');
+        valor = "incorrecto";
+    } else {
+        $('#id_rol').css('border','');
+    }
+
+
+    if (valor == "correcto"){
+        var cadena = "&user="+ user +
+            "&role="+ role +
+            "&id="+ id;
+
+
+        $.ajax({
+            type:"POST",
+            url: urlweb + "api/Negocio/saveRoleUser",
+            data: cadena,
+            success:function (r) {
+                switch (r) {
+                    case "1":
+                        alertify.success("¡Guardado!");
+                        location.href = urlweb +  'Negocio/gestionar/' + id;
+                        break;
+                    case "2":
+                        alertify.error("Fallo el envio");
+                        break;
+                    default:
+                        alertify.error("ERROR DESCONOCIDO");
+                }
+            }
+        });
+    }
+
+}

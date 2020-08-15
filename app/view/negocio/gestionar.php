@@ -33,41 +33,47 @@
         <br>
         <!-- /.row (main row) -->
 
-
         <div class="row">
-            <div class="col-lg-8">
-                <table id="example3" class="table table-bordered table-hover">
-                    <thead class="text-capitalize">
-                    <tr>
-                        <th>Nombre del Negocio</th>
-                        <th>Usuario</th>
-                        <th>Rol</th>            
-                    </tr>
-                    </thead>
-                    <tbody>
+            <div class="col-xs-10">
+                <center><h1><?php echo $negocio->negocio_nombre;?></h1></center>
+                <h2><?php echo $negocio->negocio_direccion;?></h2>
+                <h2><?php echo $negocio->negocio_telefono;?></h2>
+
+            </div>
+        </div>
+
+            <div class="form-group">
+                <input type="hidden" id="id_negocio" value="<?= $id; ?>">
+                <label class="col-form-label">USUARIO</label>
+                <select class="form-control" id= "id_user" >
+                    <option value="">Seleccionar Usuario</option>
                     <?php
-                    foreach ($products as $product){
+                    foreach($usuario as $u){
                         ?>
-                        <tr>
-                            <td>BUFEO TEC</td>
-                            <td>JERSON </td>
-                            <td>admin</td>
-                            <!--<td><?php echo $product->product_name;?></td>
-                            <td><?php echo $product->categoryp_name;?></td>
-                            <td><?php echo $product->product_barcode;?></td> -->
-                            
-                            <!--<td><a class="btn btn-chico btn-warning btn-xs" type="button" href="<?php echo _SERVER_;?>Inventory/editProduct/<?php echo $product->id_product;?>"><i class="fa fa-pencil"></i> Editar</a><a class="btn btn-chico btn-danger btn-xs" onclick="preguntarSiNo(<?php echo $product->id_product;?>)"><i class="fa fa-times"></i> Eliminar</a><a class="btn btn-info btn-xs" href="<?php echo _SERVER_;?>Inventory/addProductstock/<?php echo $product->id_product;?>"><i class="fa fa-sort-numeric-asc"></i> Agregar Stock</a><a class="btn btn-primary btn-xs" href="<?php echo _SERVER_;?>Inventory/outProductstock/<?php echo $product->id_product;?>"><i class="fa fa-eraser"></i>Salida Stock</a>
-                            </td>-->
-                        </tr>
-                        <!--<a class="btn btn-dropbox btn-xs" href="<?php echo _SERVER_;?>Inventory/productForsale/<?php echo $product->id_product;?>"><i class="fa fa-money"></i>  Ver Costo Venta</a>-->
+                        <option <?php echo ($u->id_user == $usuario->id_user) ? 'selected' : '';?> value="<?php echo $u->id_user;?>"><?php echo $u->user_nickname ;?></option>
                         <?php
                     }
                     ?>
-                    </tbody>
-                    
-                </table>
+                </select>
             </div>
-        </div>
+            <div class="form-group">
+                <label class="col-form-label">ROL</label>
+                <select class="form-control" id= "id_rol" >
+                    <option value="">Seleccionar ROL</option>
+                    <?php
+                    foreach($rol as $r){
+                        ?>
+                        <option <?php echo ($r->id_role == $rol->id_role) ? 'selected' : '';?> value="<?php echo $r->id_role;?>"><?php echo $r->role_name ;?></option>
+                        <?php
+
+                    }
+                    ?>
+                </select>
+            </div>
+            <div class="form-group">
+                <button class="btn btn-success" onclick="saveRoleUser()">Agregar</button>
+            </div>
+
 
     </section>
     <!-- /.content -->

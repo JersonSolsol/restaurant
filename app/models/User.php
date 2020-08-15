@@ -260,6 +260,22 @@ class User{
         return $result;
     }
 
+    //Listar Usuario para negocio
+
+    public function listarUsuario(){
+        try{
+            $sql = 'select * from user';
+            $stm = $this->pdo->prepare($sql);
+            $stm->execute([]);
+            $result = $stm->fetchAll();
+
+        } catch (Exception $e){
+            $this->log->insert($e->getMessage(), get_class($this).'|'.__FUNCTION__);
+            $result = [];
+        }
+        return $result;
+    }
+
     public function sessionclose(){
         try{
             unset($_SESSION['id_user']);

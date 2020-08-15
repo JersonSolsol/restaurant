@@ -140,4 +140,28 @@ class Negocio{
         return $result;
     }
 
+    public function saveRoleUser($model){
+        try {
+
+                $sql = 'insert into negocio_user(
+                id_negocio, id_user, id_rol, negocio_user_datetime, negocio_user_estado
+                ) values(?,?,?,?,?)';
+                $stm = $this->pdo->prepare($sql);
+                $stm->execute([
+                    $model->id_negocio,
+                    $model->id_user,
+                    $model->id_rol,
+                    $model->negocio_user_datetime,
+                    $model->negocio_user_estado
+                ]);
+
+            $result = 1;
+        } catch (Exception $e){
+            //throw new Exception($e->getMessage());
+            $this->log->insert($e->getMessage(), get_class($this).'|'.__FUNCTION__);
+            $result = 2;
+        }
+        return $result;
+    }
+
 }
