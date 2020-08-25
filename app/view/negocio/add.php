@@ -25,7 +25,7 @@
     <section class="content">
         <div class="row">
             <!-- left column -->
-            <div class="col-md-6">
+            <div class="col-md-12">
                 <!-- general form elements -->
                 <div class="box box-primary">
                     <div class="box-header with-border">
@@ -34,43 +34,63 @@
                     <!-- /.box-header -->
                     <!-- form start -->
                     <div>
+                        <div class="col-xs-12">
                         <div class="box-body">
-                            <div class="form-group">
-                                <label class="col-form-label">Nombre del Negocio</label>
-                                <input type="text" class="form-control" id="negocio_nombre" placeholder="Ingresar Nombre del Negocio...">
+                            <div class="col-xs-6">
+                                <div class="form-group">
+                                    <label class="col-form-label">Nombre del Negocio</label>
+                                    <input type="text" class="form-control" id="negocio_nombre" placeholder="Ingresar Nombre del Negocio...">
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label class="col-form-label">Dirección</label>
-                                <input type="text" class="form-control" id="negocio_direccion" placeholder="Ingresar Dirección...">
+                            <div class="col-xs-6">
+                                <div class="form-group">
+                                    <label class="col-form-label">Dirección</label>
+                                    <input type="text" class="form-control" id="negocio_direccion" placeholder="Ingresar Dirección...">
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label class="col-form-label">Ciudad</label>
-                                <select class="form-control" id= "negocio_ciudad">
-                                    <option value="">Elegir ciudad</option>
-                                    <?php 
-                                    foreach($listaciudad as $l){
+                        </div>
+                            <div class="col-xs-2">
+                                <div class="form-group">
+                                    <label class="col-form-label">Ciudad</label>
+                                    <select class="form-control" id= "negocio_ciudad">
+                                        <option value="">Elegir ciudad</option>
+                                        <?php
+                                        foreach($listaciudad as $l){
+                                            ?>
+                                            <option value="<?php echo $l->id_ciudad;?>"><?php echo $l->nombre_ciudad;?></option>
+                                            <?php
+                                        }
                                         ?>
-                                        <option value="<?php echo $l->id_ciudad;?>"><?php echo $l->nombre_ciudad;?></option>
-                                        <?php 
-                                    }   
-                                    ?>
-                                </select>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-xs-2">
+                                <div class="form-group">
+                                    <label class="col-form-label">Coordenadas X</label>
+                                    <input type="text" class="form-control" id="negocio_coordenadas_X" placeholder="Ingresar Coordenadas X...">
+                                </div>
+                            </div>
+                            <div class="col-xs-2">
+                                <div class="form-group">
+                                    <label class="col-form-label">Coordenadas Y</label>
+                                    <input type="text" class="form-control" id="negocio_coordenadas_Y" placeholder="Ingresar Coordenadas Y...">
+                                </div>
+                            </div>
+                            <div class="col-xs-3">
+                                <div class="form-group">
+                                    <label class="col-form-label">RUC</label>
+                                    <input type="text" class="form-control" id="negocio_ruc" placeholder="Ingresar Número..." onkeypress="return valida(event)">
+                                </div>
+                            </div>
+                            <div class="col-xs-3">
+                                <div class="form-group">
+                                    <label class="col-form-label">Teléfono o Celular</label>
+                                    <input type="text" class="form-control" id="negocio_telefono" placeholder="Ingresar Teléfono o Celular..." onkeypress="return valida(event)">
+                                </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-form-label">Coordenadas</label>
-                                <input type="text" class="form-control" id="negocio_coordenadas" placeholder="Ingresar Coordenadas...">
-                            </div>
-                            <div class="form-group">
-                                <label class="col-form-label">RUC</label>
-                                <input type="text" class="form-control" id="negocio_ruc" placeholder="Ingresar Número..." onkeypress="return valida(event)">
-                            </div>
-                            <div class="form-group">
-                                <label class="col-form-label">Teléfono o Celular</label>
-                                <input type="text" class="form-control" id="negocio_telefono" placeholder="Ingresar Teléfono o Celular..." onkeypress="return valida(event)">
-                            </div>
-                            
-                            <div class="form-group">
-                                <button class="btn btn-success" onclick="save()"> Agregar Negocio</button>
+                                <button class="btn btn-success" onclick="save()"><i class="fa fa-plus"></i> Agregar Negocio</button>
+                                <button class="btn btn-danger" onclick="save()"><i class="fa fa-remove"></i> Cancelar</button>
                             </div>
                         </div>
                         <!-- /.box-body -->

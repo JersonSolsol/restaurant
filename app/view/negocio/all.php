@@ -30,14 +30,14 @@
                 <center><h2>Lista de Negocios Registrados</h2></center>
             </div>
             <div class="col-xs-2">
-                <center><a class="btn btn-block btn-success btn-sm" href="<?php echo _SERVER_;?>Negocio/add" >Agregar Nuevo</a></center>
+                <center><a class="btn btn-block btn-success btn-sm" href="<?php echo _SERVER_;?>Negocio/add" ><i class="fa fa-plus"></i> Agregar Nuevo Negocio</a></center>
             </div>
         </div>
         <br>
         <!-- /.row (main row) -->
         <div class="row">
             <div class="col-lg-12">
-                <table id="example2" class="table table-bordered table-hover">
+                <table id="example3" class="table table-bordered table-hover">
                     <thead class="text-capitalize">
                     <tr>
                         <th>ID</th>
@@ -46,6 +46,7 @@
                         <th>Coordenadas</th>
                         <th>RUC</th>   
                         <th>Telefono</th>
+                        <th>Accion</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -55,16 +56,17 @@
                         ?>
                         <tr>
                             <td><?php echo $a;?></td>
-                            <td><?php echo $m->negocio_nombre;?></td>
+                            <td> <?php echo $m->negocio_nombre;?></td>
                             <td><?php echo $m->negocio_direccion;?></td>
-                            <td><?php echo $m->negocio_coordenadas;?></td>
+                            <td>X:<?php echo $m->negocio_coordenadas_X;?>, Y:<?php echo $m->negocio_coordenadas_Y;?></td>
                             <td><?php echo $m->negocio_ruc;?></td>                         
                             <td><?php echo $m->negocio_telefono;?></td>
-                            <td><a type="button" class="btn btn-xs btn-primary btne" href="<?php echo _SERVER_ . 'Negocio/edit/' . $m->id_negocio;?>" >Editar Negocios</a><a type="button" class="btn btn-xs btn-info btne" href="<?php echo _SERVER_ . 'Negocio/gestionar/' . $m->id_negocio;?>" >Gestionar Usuarios</a><a type="button" class="btn btn-xs btn-danger" onclick="preguntarSiNo(<?php echo $m->id_negocio;?>)">Eliminar</a></td>
+                            <td><a type="button" class="btn btn-xs btn-primary btn" href="<?php echo _SERVER_ . 'Negocio/edit/' . $m->id_negocio;?>" ><i class="fa fa-pencil"></i> Editar Negocios</a><a type="button" class="btn btn-xs btn-info btne" href="<?php echo _SERVER_ . 'Negocio/gestionar/' . $m->id_negocio;?>" ><i class="fa fa-user"></i> Gestionar Usuarios</a><a type="button" class="btn btn-xs btn-info btne" href="<?php echo _SERVER_ . 'Negocio/sucursal/' . $m->id_negocio;?>" ><i class="fa fa-user"></i> Gestionar Sucursal</a><a type="button" class="btn btn-xs btn-danger" onclick="preguntarSiNo(<?php echo $m->id_negocio;?>)"><i class="fa fa-remove"></i> Eliminar</a></td>
                         </tr>
                         <?php
                         $a++;
                     }
+
                     ?>
                     </tbody>
                 </table>

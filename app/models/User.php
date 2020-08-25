@@ -276,6 +276,8 @@ class User{
         return $result;
     }
 
+
+
     public function sessionclose(){
         try{
             unset($_SESSION['id_user']);

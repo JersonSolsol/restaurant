@@ -36,44 +36,83 @@
         <div class="row">
             <div class="col-xs-10">
                 <center><h1><?php echo $negocio->negocio_nombre;?></h1></center>
-                <h2><?php echo $negocio->negocio_direccion;?></h2>
-                <h2><?php echo $negocio->negocio_telefono;?></h2>
-
             </div>
         </div>
+            <div class = "row">
+                <div class="col-xs-12">
+                <h2><?php echo $negocio->negocio_direccion;?></h2>
+                <h2><?php echo $negocio->negocio_telefono;?></h2>
+                <h2><?php echo $negocio->negocio_ruc;?></h2>
 
-            <div class="form-group">
-                <input type="hidden" id="id_negocio" value="<?= $id; ?>">
-                <label class="col-form-label">USUARIO</label>
-                <select class="form-control" id= "id_user" >
-                    <option value="">Seleccionar Usuario</option>
-                    <?php
-                    foreach($usuario as $u){
-                        ?>
-                        <option <?php echo ($u->id_user == $usuario->id_user) ? 'selected' : '';?> value="<?php echo $u->id_user;?>"><?php echo $u->user_nickname ;?></option>
-                        <?php
-                    }
-                    ?>
-                </select>
+                </div>
             </div>
-            <div class="form-group">
-                <label class="col-form-label">ROL</label>
-                <select class="form-control" id= "id_rol" >
-                    <option value="">Seleccionar ROL</option>
-                    <?php
-                    foreach($rol as $r){
-                        ?>
-                        <option <?php echo ($r->id_role == $rol->id_role) ? 'selected' : '';?> value="<?php echo $r->id_role;?>"><?php echo $r->role_name ;?></option>
-                        <?php
+            <div class="col-md-12">
+                <div class="col-xs-3">
+                    <div class="form-group">
+                        <input type="hidden" id="id_negocio" value="<?= $id; ?>">
+                        <label class="col-form-label">USUARIO</label>
+                        <select class="form-control" id= "id_user" >
+                            <option value="">Seleccionar Usuario</option>
+                            <?php
+                            foreach($usuario as $u){
+                                $validaruser = $this->negocio->validarUserRol($id,$u->id_user);
+                                if(!$validaruser){
+                                    ?>
+                                    <option value="<?php echo $u->id_user;?>"><?php echo $u->user_nickname ;?></option>
+                                    <?php
+                                }
+                            }
+                            ?>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-xs-3">
+                    <div class="form-group">
+                        <label class="col-form-label">ROL</label>
+                        <select class="form-control" id= "id_rol" >
+                            <option value="">Seleccionar ROL</option>
+                            <?php
+                            foreach($rol as $r){
+                                ?>
+                                <option value="<?php echo $r->id_role;?>"><?php echo $r->role_name ;?></option>
+                                <?php
+                            }
+                            ?>
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-6">
+                        <table class="table table-bordered table-hover">
+                            <thead class="text-capitalize">
+                            <tr>
+                                <th>Usuario</th>
+                                <th>Rol</th>
+                                <th>Accion</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <?php
+                            foreach ( $negocio_user as $nu) {
+                                ?>
+                                <tr>
+                                    <td><?php echo $nu->user_nickname; ?></td>
+                                    <td><?php echo $nu->role_name; ?></td>
+                                    <td><a type="button" class="fa fa-remove" onclick="preguntarSiNoUser(<?php echo $nu->id_negocio_user;?>)"></a>
+                                    </td>
+                                </tr>
+                                <?php
+                            }
+                            ?>
+                            </tbody>
 
-                    }
-                    ?>
-                </select>
+                        </table>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-success" onclick="saveRoleUser()">Agregar</button>
+                </div>
             </div>
-            <div class="form-group">
-                <button class="btn btn-success" onclick="saveRoleUser()">Agregar</button>
-            </div>
-
 
     </section>
     <!-- /.content -->

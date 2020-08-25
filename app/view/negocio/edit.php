@@ -25,7 +25,7 @@
     <section class="content">
         <div class="row">
             <!-- left column -->
-            <div class="col-md-6">
+            <div class="col-md-12">
                 <!-- general form elements -->
                 <div class="box box-primary">
                     <div class="box-header with-border">
@@ -34,42 +34,63 @@
                     <!-- /.box-header -->
                     <!-- form start -->
                     <div>
-                        <div class="box-body">
-                            <div class="form-group">
-                                <label class="col-form-label">Nombre del Negocio</label>
-                                <input type="text" class="form-control" id="negocio_nombre" placeholder="Ingresar Nombre del Negocio..." value="<?php echo $negocio->negocio_nombre;?>">
-                            </div>
-                            <div class="form-group">
-                                <label class="col-form-label">Direccion</label>
-                                <input type="text" class="form-control" id="negocio_direccion" value="<?php echo $negocio->negocio_direccion;?>">
-                            </div>
-                             <div class="form-group">
-                                <label class="col-form-label">Ciudad</label>
-                                <select class="form-control" id= "negocio_ciudad" >
-                                    <option value="">Elegir ciudad</option>
-                                    <?php 
-                                    foreach($listaciudad as $l){
-                                        ?>
-                                        <option <?php echo ($l->id_ciudad == $negocio->id_ciudad) ? 'selected' : '';?> value="<?php echo $l->id_ciudad;?>"><?php echo $l->nombre_ciudad ;?></option>
-                                        <?php 
-                                    }   
-                                    ?>   
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-form-label">Coordenadas</label>
-                                <input type="text" class="form-control" id="negocio_coordenadas" placeholder="Ingresar Coordenadas..." value="<?php echo $negocio->negocio_coordenadas;?>" onkeypress="return valida(event)">
-                            </div>
-                            <div class="form-group">
-                                <label class="col-form-label">RUC</label>
-                                <input type="text" class="form-control" id="negocio_ruc" placeholder="Ingresar RUC..." value="<?php echo $negocio->negocio_ruc;?>" onkeypress="return valida(event)">
-                            </div>
-                              <div class="form-group">
-                                <label class="col-form-label">Telefono</label>
-                                <input type="text" class="form-control" id="negocio_telefono" placeholder="Ingresar Teléfono..." value="<?php echo $negocio->negocio_telefono;?>" onkeypress="return valida(event)">
-                            </div>
-                            <div class="form-group">
-                                <button class="btn btn-success" onclick="save()">Editar Negocio</button>
+                        <div class="col-xs-12">
+                            <div class="box-body">
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label class="col-form-label">Nombre del Negocio</label>
+                                        <input type="text" class="form-control" id="negocio_nombre" placeholder="Ingresar Nombre del Negocio..." value="<?php echo $negocio->negocio_nombre;?>">
+                                    </div>
+                                </div>
+                                <div class="col-xs-6">
+                                    <div class="form-group">
+                                        <label class="col-form-label">Direccion</label>
+                                        <input type="text" class="form-control" id="negocio_direccion" value="<?php echo $negocio->negocio_direccion;?>">
+                                    </div>
+                                </div>
+                                <div class="col-xs-2">
+                                     <div class="form-group">
+                                        <label class="col-form-label">Ciudad</label>
+                                        <select class="form-control" id= "negocio_ciudad" >
+                                            <option value="">Elegir ciudad</option>
+                                            <?php
+                                            foreach($listaciudad as $l){
+                                                ?>
+                                                <option <?php echo ($l->id_ciudad == $negocio->id_ciudad) ? 'selected' : '';?> value="<?php echo $l->id_ciudad;?>"><?php echo $l->nombre_ciudad ;?></option>
+                                                <?php
+                                            }
+                                            ?>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-xs-3">
+                                    <div class="form-group">
+                                        <label class="col-form-label">Coordenadas X</label>
+                                        <input type="text" class="form-control" id="negocio_coordenadas_X" placeholder="Ingresar Coordenadas X..." value="<?php echo $negocio->negocio_coordenadas_X;?>" onkeypress="return valida(event)">
+                                    </div>
+                                </div>
+                                <div class="col-xs-3">
+                                    <div class="form-group">
+                                        <label class="col-form-label">Coordenadas Y</label>
+                                        <input type="text" class="form-control" id="negocio_coordenadas_Y" placeholder="Ingresar Coordenadas Y..." value="<?php echo $negocio->negocio_coordenadas_Y;?>" onkeypress="return valida(event)">
+                                    </div>
+                                </div>
+                                <div class="col-xs-2">
+                                    <div class="form-group">
+                                        <label class="col-form-label">RUC</label>
+                                        <input type="text" class="form-control" id="negocio_ruc" placeholder="Ingresar RUC..." value="<?php echo $negocio->negocio_ruc;?>" onkeypress="return valida(event)">
+                                    </div>
+                                </div>
+                                <div class="col-xs-2">
+                                    <div class="form-group">
+                                        <label class="col-form-label">Telefono</label>
+                                        <input type="text" class="form-control" id="negocio_telefono" placeholder="Ingresar Teléfono..." value="<?php echo $negocio->negocio_telefono;?>" onkeypress="return valida(event)">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <button class="btn btn-success" onclick="save()"><i class="fa fa-pencil"></i> Editar Negocio</button>
+                                    <button class="btn btn-danger" onclick="save()"><i class="fa fa-circle-o-notch"></i> Cancelar</button>
+                                </div>
                             </div>
                         </div>
                         <!-- /.box-body -->

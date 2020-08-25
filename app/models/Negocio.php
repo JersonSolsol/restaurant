@@ -65,15 +65,16 @@ class Negocio{
         try {
             if(empty($model->id_negocio)){
                 $sql = 'insert into negocio(
-                    id_ciudad, id_usuario, negocio_nombre, negocio_direccion, negocio_coordenadas, negocio_ruc, negocio_telefono 
-                    ) values(?,?,?,?,?,?,?)';
+                    id_ciudad, id_usuario, negocio_nombre, negocio_direccion, negocio_coordenadas_X, negocio_coordenadas_Y, negocio_ruc, negocio_telefono 
+                    ) values(?,?,?,?,?,?,?,?)';
                 $stm = $this->pdo->prepare($sql);
                 $stm->execute([
                     $model->id_ciudad,
                     $model->id_usuario,
                     $model->negocio_nombre,
                     $model->negocio_direccion,
-                    $model->negocio_coordenadas,
+                    $model->negocio_coordenadas_X,
+                    $model->negocio_coordenadas_Y,
                     $model->negocio_ruc,
                     $model->negocio_telefono
                 ]);
@@ -85,7 +86,8 @@ class Negocio{
                 id_usuario = ?,
                 negocio_nombre = ?,
                 negocio_direccion = ?,
-                negocio_coordenadas = ?,
+                negocio_coordenadas_X = ?,
+                negocio_coordenadas_Y = ?,
                 negocio_ruc = ?,
                 negocio_telefono = ?
                 where id_negocio = ?";
@@ -96,7 +98,8 @@ class Negocio{
                     $model->id_usuario,
                     $model->negocio_nombre,
                     $model->negocio_direccion,
-                    $model->negocio_coordenadas,
+                    $model->negocio_coordenadas_X,
+                    $model->negocio_coordenadas_Y,
                     $model->negocio_ruc,
                     $model->negocio_telefono,
                     $model->id_negocio
@@ -142,7 +145,6 @@ class Negocio{
 
     public function saveRoleUser($model){
         try {
-
                 $sql = 'insert into negocio_user(
                 id_negocio, id_user, id_rol, negocio_user_datetime, negocio_user_estado
                 ) values(?,?,?,?,?)';
@@ -154,7 +156,6 @@ class Negocio{
                     $model->negocio_user_datetime,
                     $model->negocio_user_estado
                 ]);
-
             $result = 1;
         } catch (Exception $e){
             //throw new Exception($e->getMessage());
@@ -163,5 +164,187 @@ class Negocio{
         }
         return $result;
     }
+
+    public function listRoleUser($id){
+        try {
+            $sql = 'select * from negocio_user n INNER JOIN user u ON n.id_user = u.id_user INNER JOIN role r ON n.id_rol = r.id_role where n.id_negocio = ? '  ;
+            $stm = $this->pdo->prepare($sql);
+            $stm->execute([$id]);
+            $result = $stm->fetchAll();
+
+        } catch (Exception $e){
+            //throw new Exception($e->getMessage());
+            $this->log->insert($e->getMessage(), get_class($this).'|'.__FUNCTION__);
+            $result = 2;
+        }
+        return $result;
+    }
+
+    public function validarUserRol($id_negocio , $id_user){
+       try {
+
+           $sql = 'select * from negocio_user where id_negocio = ? and id_user = ?';
+           $stm = $this->pdo->prepare($sql);
+           $stm->execute([$id_negocio, $id_user]);
+           $resultado = $stm->fetch();
+           (isset($resultado->id_negocio_user)) ? $result = true : $result = false;
+
+       }catch (Exception $e){
+               $this->log->insert($e->getMessage(),get_class($this).'|'.__FUNCTION__);
+               $result = [];
+       }
+       return $result;
+    }
+
+
+    public function validarName($negocio_nombre){
+        try {
+
+            $sql = 'select * from negocio where negocio_nombre = ?';
+            $stm = $this->pdo->prepare($sql);
+            $stm->execute([$negocio_nombre]);
+            $resultado = $stm->fetch();
+            (isset($resultado->id_negocio)) ? $result = true : $result = false;
+
+        }catch (Exception $e){
+            $this->log->insert($e->getMessage(),get_class($this).'|'.__FUNCTION__);
+            $result = [];
+        }
+        return $result;
+    }
+//para validar un editar
+    public function validarNameeditar($negocio_nombre, $id_negocio){
+        try {
+
+            $sql = 'select * from negocio where negocio_nombre = ? and id_negocio <> ?';
+            $stm = $this->pdo->prepare($sql);
+            $stm->execute([$negocio_nombre, $id_negocio]);
+            $resultado = $stm->fetch();
+            (isset($resultado->id_negocio)) ? $result = true : $result = false;
+
+        }catch (Exception $e){
+            $this->log->insert($e->getMessage(),get_class($this).'|'.__FUNCTION__);
+            $result = [];
+        }
+        return $result;
+    }
+
+
+    public function deleteUser($id_negocio_user){
+        try{
+            $sql = 'delete from negocio_user where id_negocio_user = ?';
+            $stm = $this->pdo->prepare($sql);
+            $stm->execute([$id_negocio_user]);
+            $result = 1;
+        } catch (Exception $e){
+            $this->log->insert($e->getMessage(), get_class($this).'|'.__FUNCTION__);
+            $result = 2;
+        }
+        return $result;
+    }
+
+    public function deleteSucursal($id_sucursal){
+        try{
+            $sql = 'delete from sucursal where id_sucursal = ?';
+            $stm = $this->pdo->prepare($sql);
+            $stm->execute([$id_sucursal]);
+            $result = 1;
+        } catch (Exception $e){
+            $this->log->insert($e->getMessage(), get_class($this).'|'.__FUNCTION__);
+            $result = 2;
+        }
+        return $result;
+    }
+
+
+
+    public function listUserNegocios($id){
+        try {
+        $sql = 'select * from negocio_user nu INNER JOIN user u ON nu.id_user = u.id_user INNER JOIN negocio n ON nu.id_negocio = n.id_negocio INNER JOIN role r ON nu.id_rol = r.id_role where u.id_user = ?'  ;
+            $stm = $this->pdo->prepare($sql);
+            $stm->execute([$id]);
+            $result = $stm->fetchAll();
+
+        } catch (Exception $e){
+            //throw new Exception($e->getMessage());
+            $this->log->insert($e->getMessage(), get_class($this).'|'.__FUNCTION__);
+            $result = 2;
+        }
+        return $result;
+    }
+
+
+    public function saveSucursal($model){
+        try {
+            if(empty($model->id_sucursal)){
+                $sql = 'insert into sucursal(
+                    id_ciudad, id_negocio, sucursal_nombre, sucursal_direccion, sucursal_coordenadas_X, sucursal_coordenadas_Y, sucursal_ruc, sucursal_telefono 
+                    ) values(?,?,?,?,?,?,?,?)';
+                $stm = $this->pdo->prepare($sql);
+                $stm->execute([
+                    $model->id_ciudad,
+                    $model->id_negocio,
+                    $model->sucursal_nombre,
+                    $model->sucursal_direccion,
+                    $model->sucursal_coordenadas_X,
+                    $model->sucursal_coordenadas_Y,
+                    $model->sucursal_ruc,
+                    $model->sucursal_telefono
+                ]);
+
+            } else {
+                $sql = "update sucursal
+                set
+                id_ciudad = ?,
+                id_negocio = ?,
+                sucursal_nombre = ?,
+                sucursal_direccion = ?,
+                sucursal_coordenadas_X = ?,
+                sucursal_coordenadas_Y = ?,
+                sucursal_ruc = ?,
+                sucursal_telefono = ?
+                where id_sucursal = ?";
+
+                $stm = $this->pdo->prepare($sql);
+                $stm->execute([
+                    $model->id_ciudad,
+                    $model->id_negocio,
+                    $model->sucursal_nombre,
+                    $model->sucursal_direccion,
+                    $model->sucursal_coordenadas_X,
+                    $model->sucursal_coordenadas_Y,
+                    $model->sucursal_ruc,
+                    $model->sucursal_telefono,
+                    $model->id_sucursal
+                ]);
+                unset($_SESSION['id_sucursal']);
+            }
+            $result = 1;
+        } catch (Exception $e){
+            //throw new Exception($e->getMessage());
+            $this->log->insert($e->getMessage(), get_class($this).'|'.__FUNCTION__);
+            $result = 2;
+        }
+        return $result;
+    }
+
+
+    public function listSucursal($id){
+        try {
+            $sql = 'select * from sucursal s INNER JOIN negocio n ON s.id_negocio = n.id_negocio where s.id_negocio = ? '  ;
+            $stm = $this->pdo->prepare($sql);
+            $stm->execute([$id]);
+            $result = $stm->fetchAll();
+
+        } catch (Exception $e){
+            //throw new Exception($e->getMessage());
+            $this->log->insert($e->getMessage(), get_class($this).'|'.__FUNCTION__);
+            $result = 2;
+        }
+        return $result;
+    }
+
+
+
 
 }
