@@ -39,15 +39,35 @@
             </div>
         </div>
             <div class = "row">
-                <div class="col-xs-12">
+                <div class="col-md-12">
+                    <div class="col-xs-4">
                 <h2><?php echo $negocio->negocio_direccion;?></h2>
-                <h2><?php echo $negocio->negocio_telefono;?></h2>
-                <h2><?php echo $negocio->negocio_ruc;?></h2>
-
+                    </div>
+                        <div class="col-xs-4">
+                        <h2><?php echo $negocio->negocio_telefono;?></h2>
+                        </div>
+                            <div class="col-xs-4">
+                            <h2><?php echo $negocio->negocio_ruc;?></h2>
+                            </div>
                 </div>
             </div>
             <div class="col-md-12">
-                <div class="col-xs-3">
+                <div class="col-xs-2">
+                    <div class="form-group">
+                        <label class="col-form-label">SUCURSAL</label>
+                        <select class="form-control" id= "id_sucursal">
+                            <option value="">Seleccionar Sucursal</option>
+                            <?php
+                            foreach($list_sucursal as $s){
+                                ?>
+                                <option value="<?php echo $s->id_sucursal;?>"><?php echo $s->sucursal_nombre ;?></option>
+                                <?php
+                            }
+                            ?>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-xs-2">
                     <div class="form-group">
                         <input type="hidden" id="id_negocio" value="<?= $id; ?>">
                         <label class="col-form-label">USUARIO</label>
@@ -66,7 +86,7 @@
                         </select>
                     </div>
                 </div>
-                <div class="col-xs-3">
+                <div class="col-xs-2">
                     <div class="form-group">
                         <label class="col-form-label">ROL</label>
                         <select class="form-control" id= "id_rol" >
@@ -81,11 +101,13 @@
                         </select>
                     </div>
                 </div>
+
                 <div class="row">
                     <div class="col-xs-6">
                         <table class="table table-bordered table-hover">
                             <thead class="text-capitalize">
                             <tr>
+                                <th>Sucursal</th>
                                 <th>Usuario</th>
                                 <th>Rol</th>
                                 <th>Accion</th>
@@ -96,6 +118,7 @@
                             foreach ( $negocio_user as $nu) {
                                 ?>
                                 <tr>
+                                    <td><?php echo $nu->sucursal_nombre; ?></td>
                                     <td><?php echo $nu->user_nickname; ?></td>
                                     <td><?php echo $nu->role_name; ?></td>
                                     <td><a type="button" class="fa fa-remove" onclick="preguntarSiNoUser(<?php echo $nu->id_negocio_user;?>)"></a>

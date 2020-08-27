@@ -66,25 +66,25 @@
                                 <div class="col-xs-3">
                                     <div class="form-group">
                                         <label class="col-form-label">Coordenadas X</label>
-                                        <input type="text" class="form-control" id="negocio_coordenadas_X" placeholder="Ingresar Coordenadas X..." value="<?php echo $negocio->negocio_coordenadas_X;?>" onkeypress="return valida(event)">
+                                        <input type="text" onkeypress="return solonumeros(event)" class="form-control" id="negocio_coordenadas_X" placeholder="Ingresar Coordenadas X..." value="<?php echo $negocio->negocio_coordenadas_X;?>" onkeypress="return valida(event)">
                                     </div>
                                 </div>
                                 <div class="col-xs-3">
                                     <div class="form-group">
                                         <label class="col-form-label">Coordenadas Y</label>
-                                        <input type="text" class="form-control" id="negocio_coordenadas_Y" placeholder="Ingresar Coordenadas Y..." value="<?php echo $negocio->negocio_coordenadas_Y;?>" onkeypress="return valida(event)">
+                                        <input type="text" onkeypress="return solonumeros(event)" class="form-control" id="negocio_coordenadas_Y" placeholder="Ingresar Coordenadas Y..." value="<?php echo $negocio->negocio_coordenadas_Y;?>" onkeypress="return valida(event)">
                                     </div>
                                 </div>
                                 <div class="col-xs-2">
                                     <div class="form-group">
                                         <label class="col-form-label">RUC</label>
-                                        <input type="text" class="form-control" id="negocio_ruc" placeholder="Ingresar RUC..." value="<?php echo $negocio->negocio_ruc;?>" onkeypress="return valida(event)">
+                                        <input type="text" onkeypress="return solonumeros(event)" class="form-control" id="negocio_ruc" placeholder="Ingresar RUC..." value="<?php echo $negocio->negocio_ruc;?>" onkeypress="return valida(event)">
                                     </div>
                                 </div>
                                 <div class="col-xs-2">
                                     <div class="form-group">
                                         <label class="col-form-label">Telefono</label>
-                                        <input type="text" class="form-control" id="negocio_telefono" placeholder="Ingresar Teléfono..." value="<?php echo $negocio->negocio_telefono;?>" onkeypress="return valida(event)">
+                                        <input type="text" onkeypress="return solonumeros(event)" class="form-control" id="negocio_telefono" placeholder="Ingresar Teléfono..." value="<?php echo $negocio->negocio_telefono;?>" onkeypress="return valida(event)">
                                     </div>
                                 </div>
                                 <div class="form-group">

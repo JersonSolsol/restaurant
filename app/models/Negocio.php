@@ -146,11 +146,11 @@ class Negocio{
     public function saveRoleUser($model){
         try {
                 $sql = 'insert into negocio_user(
-                id_negocio, id_user, id_rol, negocio_user_datetime, negocio_user_estado
+                id_sucursal, id_user, id_rol, negocio_user_datetime, negocio_user_estado
                 ) values(?,?,?,?,?)';
                 $stm = $this->pdo->prepare($sql);
                 $stm->execute([
-                    $model->id_negocio,
+                    $model->id_sucursal,
                     $model->id_user,
                     $model->id_rol,
                     $model->negocio_user_datetime,
@@ -167,7 +167,7 @@ class Negocio{
 
     public function listRoleUser($id){
         try {
-            $sql = 'select * from negocio_user n INNER JOIN user u ON n.id_user = u.id_user INNER JOIN role r ON n.id_rol = r.id_role where n.id_negocio = ? '  ;
+            $sql = 'select * from negocio_user n INNER JOIN user u ON n.id_user = u.id_user INNER JOIN role r ON n.id_rol = r.id_role INNER JOIN sucursal s ON n.id_sucursal = s.id_sucursal where s.id_negocio = ? '  ;
             $stm = $this->pdo->prepare($sql);
             $stm->execute([$id]);
             $result = $stm->fetchAll();
@@ -180,12 +180,12 @@ class Negocio{
         return $result;
     }
 
-    public function validarUserRol($id_negocio , $id_user){
+    public function validarUserRol($id , $id_user){
        try {
 
-           $sql = 'select * from negocio_user where id_negocio = ? and id_user = ?';
+           $sql = 'select * from negocio_user nu INNER JOIN sucursal s ON nu.id_sucursal = s.id_sucursal where s.id_negocio = ? and nu.id_user = ?';
            $stm = $this->pdo->prepare($sql);
-           $stm->execute([$id_negocio, $id_user]);
+           $stm->execute([$id, $id_user]);
            $resultado = $stm->fetch();
            (isset($resultado->id_negocio_user)) ? $result = true : $result = false;
 
@@ -212,6 +212,22 @@ class Negocio{
         }
         return $result;
     }
+
+    public function validarSucursal($sucursal_nombre){
+        try {
+
+            $sql = 'select * from sucursal where sucursal_nombre = ?';
+            $stm = $this->pdo->prepare($sql);
+            $stm->execute([$sucursal_nombre]);
+            $resultado = $stm->fetch();
+            (isset($resultado->id_negocio)) ? $result = true : $result = false;
+
+        }catch (Exception $e){
+            $this->log->insert($e->getMessage(),get_class($this).'|'.__FUNCTION__);
+            $result = [];
+        }
+        return $result;
+    }
 //para validar un editar
     public function validarNameeditar($negocio_nombre, $id_negocio){
         try {
@@ -219,6 +235,22 @@ class Negocio{
             $sql = 'select * from negocio where negocio_nombre = ? and id_negocio <> ?';
             $stm = $this->pdo->prepare($sql);
             $stm->execute([$negocio_nombre, $id_negocio]);
+            $resultado = $stm->fetch();
+            (isset($resultado->id_negocio)) ? $result = true : $result = false;
+
+        }catch (Exception $e){
+            $this->log->insert($e->getMessage(),get_class($this).'|'.__FUNCTION__);
+            $result = [];
+        }
+        return $result;
+    }
+
+    public function validarSucursalEditar($sucursal_nombre, $id_sucursal){
+        try {
+
+            $sql = 'select * from sucursal where sucursal_nombre = ? and id_negocio <> ?';
+            $stm = $this->pdo->prepare($sql);
+            $stm->execute([$sucursal_nombre, $id_sucursal]);
             $resultado = $stm->fetch();
             (isset($resultado->id_negocio)) ? $result = true : $result = false;
 
@@ -329,9 +361,12 @@ class Negocio{
     }
 
 
+
+
+
     public function listSucursal($id){
         try {
-            $sql = 'select * from sucursal s INNER JOIN negocio n ON s.id_negocio = n.id_negocio where s.id_negocio = ? '  ;
+            $sql = 'select * from sucursal s INNER JOIN negocio n ON s.id_negocio = n.id_negocio INNER JOIN ciudad c ON s.id_ciudad = c.id_ciudad where s.id_negocio = ? '  ;
             $stm = $this->pdo->prepare($sql);
             $stm->execute([$id]);
             $result = $stm->fetchAll();
@@ -344,6 +379,20 @@ class Negocio{
         return $result;
     }
 
+
+    public function listarSucursalporNegocio($id_negocio){
+        try {
+            $sql = 'select * from sucursal where id_negocio = ?';
+            $stm = $this->pdo->prepare($sql);
+            $stm->execute([$id_negocio]);
+            $result = $stm->fetchAll();
+
+        } catch (Exception $e){
+            $this->log->insert($e->getMessage(), get_class($this).'|'.__FUNCTION__);
+            $result = 2;
+        }
+        return $result;
+    }
 
 
 

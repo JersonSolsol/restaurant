@@ -19,6 +19,7 @@ class NegocioController{
     private $rol;
     private $negocio_user;
     private $sucursal;
+    private $list_sucursal;
     private $usuario;
     private $crypt;
     private $nav;
@@ -32,6 +33,7 @@ class NegocioController{
         $this->rol = new Role();
         $this->negocio_user = new Negocio();
         $this->sucursal = new Negocio();
+        $this->list_sucursal = new Negocio();
         $this->crypt = new Crypt();
     }
 
@@ -103,6 +105,7 @@ class NegocioController{
             $negocio = $this->negocio->listgestionar($id);
             $usuario = $this->usuario->listarUsuario();
             $negocio_user = $this->negocio->listRoleUser($id);
+            $list_sucursal = $this->negocio->listarSucursalporNegocio($id);
             $rol = $this->rol->listarRol();
             require _VIEW_PATH_ . 'header.php';
             require _VIEW_PATH_ . 'navbar.php';
@@ -178,7 +181,7 @@ class NegocioController{
             if ($validaruser){
                 $result = 3;
             } else{
-                $model->id_negocio = $_POST['id'];
+                $model->id_sucursal = $_POST['sucursal'];
                 $model->id_user= $_POST['user'];
                 $model->id_rol = $_POST['role'];
                 $model->negocio_user_datetime = date('Y-m-d H:i:s');
@@ -244,18 +247,25 @@ class NegocioController{
             $model = new Negocio();
 
             if(isset($_SESSION['id_sucursal'])) {
-                $model->id_sucursal = $_SESSION['id_sucursal'];
-            }
+                $validar_sucursal = $this->negocio->validarSucursalEditar($_POST['sucursal_nombre'],$_SESSION['id_sucursal']);
+                $model->id_sucursal = $_POST['id_sucursal'];
+            } else{
+                $validar_sucursal = $this->negocio->validarSucursal($_POST['sucursal_nombre']);
+            } if($validar_sucursal){
+                $result = 3;
+            } else {
                 $model->id_usuario = $this->crypt->decrypt($_SESSION['id_user'], _PASS_);
-                $model->sucursal_nombre= $_POST['sucursal_nombre'];
+                $model->sucursal_nombre = $_POST['sucursal_nombre'];
                 $model->sucursal_direccion = $_POST['sucursal_direccion'];
-                $model->id_ciudad= $_POST['sucursal_ciudad'];
+                $model->id_ciudad = $_POST['sucursal_ciudad'];
                 $model->sucursal_coordenadas_X = $_POST['sucursal_coordenadas_X'];
                 $model->sucursal_coordenadas_Y = $_POST['sucursal_coordenadas_Y'];
                 $model->sucursal_ruc = $_POST['sucursal_ruc'];
                 $model->sucursal_telefono = $_POST['sucursal_telefono'];
                 $model->id_negocio = $_POST['id'];
+                $model->id_sucursal = $_POST['id_sucursal'];
                 $result = $this->negocio->saveSucursal($model);
+            }
         } catch (Exception $e){
             $this->log->insert($e->getMessage(), get_class($this).'|'.__FUNCTION__);
             $result = 2;

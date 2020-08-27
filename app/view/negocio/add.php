@@ -67,25 +67,25 @@
                             <div class="col-xs-2">
                                 <div class="form-group">
                                     <label class="col-form-label">Coordenadas X</label>
-                                    <input type="text" class="form-control" id="negocio_coordenadas_X" placeholder="Ingresar Coordenadas X...">
+                                    <input type="text" onkeypress="return solonumeros(event)" class="form-control" id="negocio_coordenadas_X" placeholder="Ingresar Coordenadas X...">
                                 </div>
                             </div>
                             <div class="col-xs-2">
                                 <div class="form-group">
                                     <label class="col-form-label">Coordenadas Y</label>
-                                    <input type="text" class="form-control" id="negocio_coordenadas_Y" placeholder="Ingresar Coordenadas Y...">
+                                    <input type="text" onkeypress="return solonumeros(event)" class="form-control" id="negocio_coordenadas_Y" placeholder="Ingresar Coordenadas Y...">
                                 </div>
                             </div>
                             <div class="col-xs-3">
                                 <div class="form-group">
                                     <label class="col-form-label">RUC</label>
-                                    <input type="text" class="form-control" id="negocio_ruc" placeholder="Ingresar Número..." onkeypress="return valida(event)">
+                                    <input type="text" onkeypress="return solonumeros(event)" class="form-control" id="negocio_ruc" placeholder="Ingresar Número..." onkeypress="return valida(event)">
                                 </div>
                             </div>
                             <div class="col-xs-3">
                                 <div class="form-group">
                                     <label class="col-form-label">Teléfono o Celular</label>
-                                    <input type="text" class="form-control" id="negocio_telefono" placeholder="Ingresar Teléfono o Celular..." onkeypress="return valida(event)">
+                                    <input type="text" onkeypress="return solonumeros(event)" class="form-control" id="negocio_telefono" placeholder="Ingresar Teléfono o Celular..." onkeypress="return valida(event)">
                                 </div>
                             </div>
                             <div class="form-group">

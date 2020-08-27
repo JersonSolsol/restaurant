@@ -126,6 +126,7 @@ function saveRoleUser() {
     var valor = "correcto";
     var user = $('#id_user').val();
     var role = $('#id_rol').val();
+    var sucursal = $('#id_sucursal').val();
     var id = $('#id_negocio').val();
 
 
@@ -145,10 +146,21 @@ function saveRoleUser() {
         $('#id_rol').css('border','');
     }
 
+    if(sucursal == ""){
+        alertify.error('El campo de la Sucursal no fue seleccionado');
+        $('#id_sucursal').css('border','solid red');
+        valor = "incorrecto";
+    } else {
+        $('#id_sucursal').css('border','');
+    }
+
+
+
 
     if (valor == "correcto"){
         var cadena = "&user="+ user +
             "&role="+ role +
+            "&sucursal="+ sucursal +
             "&id="+ id;
 
 
@@ -279,6 +291,111 @@ function saveSucursal() {
             "&sucursal_ruc=" + sucursal_ruc +
             "&sucursal_telefono=" + sucursal_telefono +
             "&id="+ id;
+
+        $.ajax({
+            type:"POST",
+            url: urlweb + "api/Negocio/saveSucursal",
+            data: cadena,
+            success:function (r) {
+                switch (r) {
+                    case "1":
+                        alertify.success("¡Guardado!");
+                        location.href = urlweb +  'Negocio/sucursal/'+ id;
+                        break;
+                    case "2":
+                        alertify.error("Fallo el envio");
+                        break;
+                    case "3":
+                        alertify.error("El Nombre de la sucursal ya existe");
+                        break;
+                    default:
+                        alertify.error("ERROR DESCONOCIDO");
+                }
+            }
+        });
+    }
+
+}function editSucursal() {
+
+    var valor = "correcto";
+    var sucursal_nombre = $('#sucursal_nombre').val();
+    var sucursal_direccion = $('#sucursal_direccion').val();
+    var sucursal_coordenadas_X = $('#sucursal_coordenadas_X').val();
+    var sucursal_coordenadas_Y = $('#sucursal_coordenadas_Y').val();
+    var sucursal_ruc = $('#sucursal_ruc').val();
+    var sucursal_telefono = $('#sucursal_telefono').val();
+    var sucursal_ciudad = $('#sucursal_ciudad').val();
+    var id = $('#id_negocio').val();
+    var id_sucursal = $('#id_sucursal').val();
+
+
+    if(sucursal_nombre == ""){
+        alertify.error('El campo Nombre Negocio está vacío');
+        $('#sucursal_nombre').css('border','solid red');
+        valor = "incorrecto";
+    } else {
+        $('#sucursal_nombre').css('border','');
+    }
+
+    if(sucursal_direccion == ""){
+        alertify.error('El campo Dirección está vacío');
+        $('#sucursal_direccion').css('border','solid red');
+        valor = "incorrecto";
+    } else {
+        $('#sucursal_direccion').css('border','');
+    }
+
+    if(sucursal_coordenadas_X == ""){
+        alertify.error('No se ha introducido las Coordenadas X');
+        $('#sucursal_coordenadas_X').css('border','solid red');
+        valor = "incorrecto";
+    } else {
+        $('#sucursal_coordenadas_X').css('border','');
+    }
+
+    if(sucursal_coordenadas_Y == ""){
+        alertify.error('No se ha introducido las Coordenadas Y');
+        $('#sucursal_coordenadas_Y').css('border','solid red');
+        valor = "incorrecto";
+    } else {
+        $('#sucursal_coordenadas_Y').css('border','');
+    }
+
+    if(sucursal_ruc == ""){
+        alertify.error('El campo TELEFONO está vacío');
+        $('#sucursal_ruc').css('border','solid red');
+        valor = "incorrecto";
+    } else {
+        $('#sucursal_ruc').css('border','');
+    }
+
+    if(sucursal_telefono == ""){
+        alertify.error('El campo TELEFONO está vacío');
+        $('#sucursal_telefono').css('border','solid red');
+        valor = "incorrecto";
+    } else {
+        $('#sucursal_telefono').css('border','');
+    }
+
+    if(sucursal_ciudad == ""){
+        alertify.error('El campo de la Ciudad está vacío');
+        $('#sucursal_ciudad').css('border','solid red');
+        valor = "incorrecto";
+    } else {
+        $('#sucursal_ciudad').css('border','');
+    }
+
+    if (valor == "correcto"){
+        var cadena = "sucursal_nombre=" + sucursal_nombre +
+            "&sucursal_direccion="+ sucursal_direccion +
+            "&sucursal_ciudad="+ sucursal_ciudad +
+            "&sucursal_coordenadas_X=" + sucursal_coordenadas_X +
+            "&sucursal_coordenadas_Y=" + sucursal_coordenadas_Y +
+            "&sucursal_ruc=" + sucursal_ruc +
+            "&sucursal_telefono=" + sucursal_telefono +
+            "&id="+ id +
+            "&id_sucursal="+ id_sucursal;
+
 
         $.ajax({
             type:"POST",
