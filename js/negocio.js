@@ -422,7 +422,6 @@ function saveSucursal() {
 
 }
 
-
 function preguntarSiNoSucursal(id_sucursal){
     alertify.confirm('Eliminar Datos', '¿Esta seguro de eliminar este registro?',
         function(){ deleterSucursal(id_sucursal) }
@@ -438,6 +437,121 @@ function deleterSucursal(id_sucursal){
         success:function (r) {
             if(r==1){
                 alertify.success('Registro Eliminado');
+                location.reload();
+            } else {
+                alertify.error('No se pudo realizar');
+            }
+        }
+    });
+}
+
+function saveMesas() {
+    var valor = "correcto";
+    var id_sucursal = $('#id_sucursal').val();
+    var mesa_nombre = $('#mesa_nombre').val();
+
+
+    if(mesa_nombre == ""){
+        alertify.error('El campo de la Mesa no fue seleccionado');
+        $('#mesa_nombre').css('border','solid red');
+        valor = "incorrecto";
+    } else {
+        $('#mesa_nombre').css('border','');
+    }
+
+
+    if (valor == "correcto"){
+        var cadena = "&id_sucursal="+ id_sucursal +
+            "&mesa_nombre=" + mesa_nombre;
+
+
+        $.ajax({
+            type:"POST",
+            url: urlweb + "api/Negocio/saveMesas",
+            data: cadena,
+            success:function (r) {
+                switch (r) {
+                    case "1":
+                        alertify.success("¡Guardado!");
+                        location.href = urlweb +  'Negocio/mesas/' + id_sucursal;
+                        break;
+                    case "2":
+                        alertify.error("Fallo el envio");
+                        break;
+                    case "3":
+                        alertify.error("EL usuario ya esta agregado a este negocio");
+                        break;
+                    default:
+                        alertify.error("ERROR DESCONOCIDO");
+                }
+            }
+        });
+    }
+
+}
+
+function editMesas() {
+    var valor = "correcto";
+    var id_sucursal = $('#id_sucursal').val();
+    var mesa_nombre = $('#mesa_nombre').val();
+    var id_mesa = $('#id_mesa').val();
+
+
+    if(mesa_nombre == ""){
+        alertify.error('El campo de la Mesa no fue seleccionado');
+        $('#mesa_nombre').css('border','solid red');
+        valor = "incorrecto";
+    } else {
+        $('#mesa_nombre').css('border','');
+    }
+
+
+    if (valor == "correcto"){
+        var cadena = "id_sucursal="+ id_sucursal +
+            "&mesa_nombre=" + mesa_nombre +
+            "&id_mesa=" + id_mesa;
+
+
+        $.ajax({
+            type:"POST",
+            url: urlweb + "api/Negocio/saveMesas",
+            data: cadena,
+            success:function (r) {
+                switch (r) {
+                    case "1":
+                        alertify.success("¡Guardado!");
+                        location.href = urlweb +  'Negocio/mesas/' + id_sucursal;
+                        break;
+                    case "2":
+                        alertify.error("Fallo el envio");
+                        break;
+                    case "3":
+                        alertify.error("EL usuario ya esta agregado a este negocio");
+                        break;
+                    default:
+                        alertify.error("ERROR DESCONOCIDO");
+                }
+            }
+        });
+    }
+
+}
+
+function preguntarSiNoMesa(id_mesa){
+    alertify.confirm('Eliminar Datos', '¿Esta seguro de eliminar este registro?',
+        function(){ deleteMesa(id_mesa) }
+        , function(){ alertify.error('Operacion Cancelada')});
+}
+
+function deleteMesa(id_mesa){
+    var cadena = "id_mesa=" + id_mesa;
+    $.ajax({
+        type:"POST",
+        url: urlweb + "api/Negocio/deleteMesa",
+        data : cadena,
+        success:function (r) {
+            if(r==1){
+                alertify.success('Mesa Eliminada');
                 location.reload();
             } else {
                 alertify.error('No se pudo realizar');

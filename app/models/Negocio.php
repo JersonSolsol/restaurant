@@ -183,7 +183,7 @@ class Negocio{
     public function validarUserRol($id , $id_user){
        try {
 
-           $sql = 'select * from negocio_user nu INNER JOIN sucursal s ON nu.id_sucursal = s.id_sucursal where s.id_negocio = ? and nu.id_user = ?';
+           $sql = 'select * from negocio_user nu INNER JOIN sucursal s ON nu.id_sucursal = s.id_sucursal where s.id_sucursal = ? and nu.id_user = ?';
            $stm = $this->pdo->prepare($sql);
            $stm->execute([$id, $id_user]);
            $resultado = $stm->fetch();
@@ -213,12 +213,12 @@ class Negocio{
         return $result;
     }
 
-    public function validarSucursal($sucursal_nombre){
+    public function validarSucursal($sucursal_nombre, $id_negocio){
         try {
 
-            $sql = 'select * from sucursal where sucursal_nombre = ?';
+            $sql = 'select * from sucursal where sucursal_nombre = ? and id_negocio = ?';
             $stm = $this->pdo->prepare($sql);
-            $stm->execute([$sucursal_nombre]);
+            $stm->execute([$sucursal_nombre, $id_negocio]);
             $resultado = $stm->fetch();
             (isset($resultado->id_negocio)) ? $result = true : $result = false;
 
@@ -245,12 +245,12 @@ class Negocio{
         return $result;
     }
 
-    public function validarSucursalEditar($sucursal_nombre, $id_sucursal){
+    public function validarSucursalEditar($sucursal_nombre, $id_sucursal, $id_negocio){
         try {
 
-            $sql = 'select * from sucursal where sucursal_nombre = ? and id_negocio <> ?';
+            $sql = 'select * from sucursal where sucursal_nombre = ? and id_negocio = ? and id_sucursal <> ?';
             $stm = $this->pdo->prepare($sql);
-            $stm->execute([$sucursal_nombre, $id_sucursal]);
+            $stm->execute([$sucursal_nombre, $id_sucursal,$id_negocio]);
             $resultado = $stm->fetch();
             (isset($resultado->id_negocio)) ? $result = true : $result = false;
 
@@ -292,7 +292,7 @@ class Negocio{
 
     public function listUserNegocios($id){
         try {
-        $sql = 'select * from negocio_user nu INNER JOIN user u ON nu.id_user = u.id_user INNER JOIN negocio n ON nu.id_negocio = n.id_negocio INNER JOIN role r ON nu.id_rol = r.id_role where u.id_user = ?'  ;
+        $sql = 'select * from negocio_user nu INNER JOIN user u ON nu.id_user = u.id_user INNER JOIN sucursal s ON nu.id_sucursal = s.id_sucursal INNER JOIN negocio n ON s.id_negocio = n.id_negocio INNER JOIN role r ON nu.id_rol = r.id_role where u.id_user = ?';
             $stm = $this->pdo->prepare($sql);
             $stm->execute([$id]);
             $result = $stm->fetchAll();
@@ -361,15 +361,27 @@ class Negocio{
     }
 
 
-
-
-
     public function listSucursal($id){
         try {
             $sql = 'select * from sucursal s INNER JOIN negocio n ON s.id_negocio = n.id_negocio INNER JOIN ciudad c ON s.id_ciudad = c.id_ciudad where s.id_negocio = ? '  ;
             $stm = $this->pdo->prepare($sql);
             $stm->execute([$id]);
             $result = $stm->fetchAll();
+
+        } catch (Exception $e){
+            //throw new Exception($e->getMessage());
+            $this->log->insert($e->getMessage(), get_class($this).'|'.__FUNCTION__);
+            $result = 2;
+        }
+        return $result;
+    }
+
+    public function listSucursalMesa($id){
+        try {
+            $sql = 'select * from sucursal s INNER JOIN negocio n ON s.id_negocio = n.id_negocio INNER JOIN ciudad c ON s.id_ciudad = c.id_ciudad where s.id_sucursal = ? '  ;
+            $stm = $this->pdo->prepare($sql);
+            $stm->execute([$id]);
+            $result = $stm->fetch();
 
         } catch (Exception $e){
             //throw new Exception($e->getMessage());
@@ -395,5 +407,85 @@ class Negocio{
     }
 
 
+
+    public function saveMesas($model){
+        try {
+            if(empty($model->id_mesa)) {
+                $sql = 'insert into mesas(
+                id_sucursal, mesa_nombre
+                ) values(?,?)';
+                $stm = $this->pdo->prepare($sql);
+                $stm->execute([
+                    $model->id_sucursal,
+                    $model->mesa_nombre
+                ]);
+            }else {
+                $sql = "update mesas
+                set
+                mesa_nombre = ?
+                where id_mesa = ?";
+                $stm = $this->pdo->prepare($sql);
+                $stm->execute([
+                    $model->mesa_nombre,
+                    $model->id_mesa
+                ]);
+            }
+            $result = 1;
+        } catch (Exception $e){
+            //throw new Exception($e->getMessage());
+            $this->log->insert($e->getMessage(), get_class($this).'|'.__FUNCTION__);
+            $result = 2;
+        }
+        return $result;
+    }
+
+
+    public function listMesa(){
+        try {
+            $sql = 'select * from mesas ';
+            $stm = $this->pdo->prepare($sql);
+            $stm->execute([]);
+            $result = $stm->fetchAll();
+
+        } catch (Exception $e){
+            //throw new Exception($e->getMessage());
+            $this->log->insert($e->getMessage(), get_class($this).'|'.__FUNCTION__);
+            $result = 2;
+        }
+        return $result;
+    }
+
+
+
+    public function deleteMesa($id_mesa){
+        try{
+            $sql = 'delete from mesas where id_mesa = ?';
+            $stm = $this->pdo->prepare($sql);
+            $stm->execute([$id_mesa]);
+            $result = 1;
+        } catch (Exception $e){
+            $this->log->insert($e->getMessage(), get_class($this).'|'.__FUNCTION__);
+            $result = 2;
+        }
+        return $result;
+    }
+
+    public function  cambiarEstado($id_mesa,$mesa_estado){
+        try {
+            $sql = "update mesas set
+                mesa_estado = ?
+                where id_mesa = ?";
+
+            $stm = $this->pdo->prepare($sql);
+            $stm->execute([
+                $mesa_estado, $id_mesa
+            ]);
+            $result = 1;
+        }catch (Exception $e){
+            $this->log->insert($e->getMessage(), get_class($this).'|'.__FUNCTION__);
+            $result = 2;
+        }
+        return $result;
+    }
 
 }

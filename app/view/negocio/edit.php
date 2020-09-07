@@ -89,7 +89,8 @@
                                 </div>
                                 <div class="form-group">
                                     <button class="btn btn-success" onclick="save()"><i class="fa fa-pencil"></i> Editar Negocio</button>
-                                    <button class="btn btn-danger" onclick="save()"><i class="fa fa-circle-o-notch"></i> Cancelar</button>
+                                    <button class="btn btn-danger" href='javascript:history.back()' <i class="fa fa-circle-o-notch"></i> Cancelar</button>
+                                    <input class="btn btn-danger" type="button" onclick=" location.href='javascript:history.back()' " value="Cancelar" name="boton" />
                                 </div>
                             </div>
                         </div>

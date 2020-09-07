@@ -6,10 +6,10 @@
  * Time: 20:37
  */
 
-require 'app/models/Negocio.php';
-require 'app/models/Ciudad.php';
-require 'app/models/User.php';
-require 'app/models/Role.php';
+    require 'app/models/Negocio.php';
+    require 'app/models/Ciudad.php';
+    require 'app/models/User.php';
+    require 'app/models/Role.php';
 class NegocioController{
     private $log;
     private $turn;
@@ -19,6 +19,7 @@ class NegocioController{
     private $rol;
     private $negocio_user;
     private $sucursal;
+    private $mesas;
     private $list_sucursal;
     private $usuario;
     private $crypt;
@@ -33,6 +34,7 @@ class NegocioController{
         $this->rol = new Role();
         $this->negocio_user = new Negocio();
         $this->sucursal = new Negocio();
+        $this->mesas = new Negocio();
         $this->list_sucursal = new Negocio();
         $this->crypt = new Crypt();
     }
@@ -119,6 +121,77 @@ class NegocioController{
         }
     }
 
+    public function misnegocios(){
+        try{
+            $this->nav = new Navbar();
+            $navs = $this->nav->listMenu($this->crypt->decrypt($_SESSION['role'],_PASS_));
+            $usern = $this->crypt->decrypt($_SESSION['id_user'], _PASS_);
+            $mostrarnegocioUser = $this->negocio->listUserNegocios($usern);
+            $negocio = $this->negocio->listAll();
+
+            require _VIEW_PATH_ . 'header.php';
+            require _VIEW_PATH_ . 'navbar.php';
+            require _VIEW_PATH_ . 'negocio/misnegocios.php';
+            require _VIEW_PATH_ . 'footer.php';
+        } catch (Throwable $e){
+            $this->log->insert($e->getMessage(), get_class($this).'|'.__FUNCTION__);
+            echo "<script language=\"javascript\">alert(\"Error Al Mostrar Contenido. Redireccionando Al Inicio\");</script>";
+            echo "<script language=\"javascript\">window.location.href=\"". _SERVER_ ."\";</script>";
+        }
+    }
+
+    public function sucursal(){
+        try{
+            $this->nav = new Navbar();
+            $navs = $this->nav->listMenu($this->crypt->decrypt($_SESSION['role'],_PASS_));
+            $id = $_GET['id'] ?? 0;
+            if($id == 0){
+                throw new Exception('ID Sin Declarar');
+            }
+            //$_SESSION['id_sucursal'] = $id;
+            $negocio = $this->negocio->listgestionar($id);
+            $usuario = $this->usuario->listarUsuario();
+            $sucursal = $this->negocio->listSucursal($id);
+            $listciudad = $this->ciudad->listciudad();
+            $rol = $this->rol->listarRol();
+            require _VIEW_PATH_ . 'header.php';
+            require _VIEW_PATH_ . 'navbar.php';
+
+            require _VIEW_PATH_ . 'negocio/sucursal.php';
+            require _VIEW_PATH_ . 'footer.php';
+        } catch (\Throwable $e){
+            $this->log->insert($e->getMessage(), get_class($this).'|'.__FUNCTION__);
+            echo "<script language=\"javascript\">alert(\"Error Al Mostrar Contenido. Redireccionando Al Inicio\");</script>";
+            echo "<script language=\"javascript\">window.location.href=\"". _SERVER_ ."\";</script>";
+        }
+    }
+
+    public function mesas(){
+        try{
+            $this->nav = new Navbar();
+            $navs = $this->nav->listMenu($this->crypt->decrypt($_SESSION['role'],_PASS_));
+            $id = $_GET['id'] ?? 0;
+            if($id == 0){
+                throw new Exception('ID Sin Declarar');
+            }
+            //$_SESSION['id_mesa'] = $id;
+            $negocio = $this->negocio->listgestionar($id);
+            $usuario = $this->usuario->listarUsuario();
+            $sucursal = $this->negocio->listSucursalMesa($id);
+            $mesas = $this->negocio->listMesa();
+
+            require _VIEW_PATH_ . 'header.php';
+            require _VIEW_PATH_ . 'navbar.php';
+
+            require _VIEW_PATH_ . 'negocio/mesas.php';
+            require _VIEW_PATH_ . 'footer.php';
+        } catch (\Throwable $e){
+            $this->log->insert($e->getMessage(), get_class($this).'|'.__FUNCTION__);
+            echo "<script language=\"javascript\">alert(\"Error Al Mostrar Contenido. Redireccionando Al Inicio\");</script>";
+            echo "<script language=\"javascript\">window.location.href=\"". _SERVER_ ."\";</script>";
+        }
+    }
+
     //Funciones
     public function save(){
         try{
@@ -160,7 +233,9 @@ class NegocioController{
             $result = 2;
         }
         echo $result;
-    }public function deleteUser(){
+    }
+
+    public function deleteUser(){
         try{
             $id_negocio_user = $_POST['id_negocio_user'];
             $result = $this->negocio->deleteUser($id_negocio_user);
@@ -177,7 +252,7 @@ class NegocioController{
         try{
             $model = new Negocio();
 
-            $validaruser = $this->negocio->validarUserRol($_POST['id'], $_POST['user']);
+            $validaruser = $this->negocio->validarUserRol($_POST['sucursal'], $_POST['user']);
             if ($validaruser){
                 $result = 3;
             } else{
@@ -196,61 +271,20 @@ class NegocioController{
         echo $result;
     }
 
-    public function misnegocios(){
-        try{
-            $this->nav = new Navbar();
-            $navs = $this->nav->listMenu($this->crypt->decrypt($_SESSION['role'],_PASS_));
-            $usern = $this->crypt->decrypt($_SESSION['id_user'], _PASS_);
-            $mostrarnegocioUser = $this->negocio->listUserNegocios($usern);
-            $negocio = $this->negocio->listAll();
-
-            require _VIEW_PATH_ . 'header.php';
-            require _VIEW_PATH_ . 'navbar.php';
-            require _VIEW_PATH_ . 'negocio/misnegocios.php';
-            require _VIEW_PATH_ . 'footer.php';
-        } catch (Throwable $e){
-            $this->log->insert($e->getMessage(), get_class($this).'|'.__FUNCTION__);
-            echo "<script language=\"javascript\">alert(\"Error Al Mostrar Contenido. Redireccionando Al Inicio\");</script>";
-            echo "<script language=\"javascript\">window.location.href=\"". _SERVER_ ."\";</script>";
-        }
-    }
 
 
-    public function sucursal(){
-        try{
-            $this->nav = new Navbar();
-            $navs = $this->nav->listMenu($this->crypt->decrypt($_SESSION['role'],_PASS_));
-            $id = $_GET['id'] ?? 0;
-            if($id == 0){
-                throw new Exception('ID Sin Declarar');
-            }
-            //$_SESSION['id_sucursal'] = $id;
-            $negocio = $this->negocio->listgestionar($id);
-            $usuario = $this->usuario->listarUsuario();
-            $sucursal = $this->negocio->listSucursal($id);
-            $listciudad = $this->ciudad->listciudad();
-            $rol = $this->rol->listarRol();
-            require _VIEW_PATH_ . 'header.php';
-            require _VIEW_PATH_ . 'navbar.php';
 
-            require _VIEW_PATH_ . 'negocio/sucursal.php';
-            require _VIEW_PATH_ . 'footer.php';
-        } catch (\Throwable $e){
-            $this->log->insert($e->getMessage(), get_class($this).'|'.__FUNCTION__);
-            echo "<script language=\"javascript\">alert(\"Error Al Mostrar Contenido. Redireccionando Al Inicio\");</script>";
-            echo "<script language=\"javascript\">window.location.href=\"". _SERVER_ ."\";</script>";
-        }
-    }
+
 
     public function saveSucursal(){
         try{
             $model = new Negocio();
 
             if(isset($_SESSION['id_sucursal'])) {
-                $validar_sucursal = $this->negocio->validarSucursalEditar($_POST['sucursal_nombre'],$_SESSION['id_sucursal']);
+                $validar_sucursal = $this->negocio->validarSucursalEditar($_POST['sucursal_nombre'],$_POST['id_sucursal'],$_POST['$id']);
                 $model->id_sucursal = $_POST['id_sucursal'];
             } else{
-                $validar_sucursal = $this->negocio->validarSucursal($_POST['sucursal_nombre']);
+                $validar_sucursal = $this->negocio->validarSucursal($_POST['sucursal_nombre'], $_POST['id']);
             } if($validar_sucursal){
                 $result = 3;
             } else {
@@ -285,6 +319,52 @@ class NegocioController{
         echo $result;
 
 }
+
+    public function saveMesas(){
+        try{
+            $model = new Negocio();
+
+            if(!empty($_POST['id_mesa'])) {
+                $model->id_mesa = $_POST['id_mesa'];
+            }
+            $model->id_sucursal = $_POST['id_sucursal'];
+            $model->mesa_nombre = $_POST['mesa_nombre'];
+            $model->mesa_user_datetime = date('Y-m-d H:i:s');
+            $model->mesa_user_estado = 1;
+            $model->id_mesa = $_POST['id_mesa'];
+            $result = $this->negocio->saveMesas($model);
+
+        } catch (Exception $e){
+            $this->log->insert($e->getMessage(), get_class($this).'|'.__FUNCTION__);
+            $result = 2;
+        }
+        echo $result;
+    }
+
+    public function deleteMesa(){
+        try{
+            $id_mesa = $_POST['id_mesa'];
+            $result = $this->negocio->deleteMesa($id_mesa);
+        } catch (Exception $e){
+            $this->log->insert($e->getMessage(), get_class($this).'|'.__FUNCTION__);
+            $result = 2;
+        }
+        echo $result;
+    }
+
+    public function cambiarEstado(){
+        try {
+            $id_mesa = $_POST['id'];
+            $mesa_estado = $_POST['mesa_estado'];
+            $result = $this->negocio->cambiarEstado($id_mesa,$mesa_estado);
+
+        }catch (Exception $e){
+            $this->log->insert($e->getMessage(), get_class($this).'|'.__FUNCTION__);
+            $result = 2;
+
+        }
+        echo $result;
+    }
 
 
 }   

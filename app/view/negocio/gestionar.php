@@ -75,12 +75,12 @@
                             <option value="">Seleccionar Usuario</option>
                             <?php
                             foreach($usuario as $u){
-                                $validaruser = $this->negocio->validarUserRol($id,$u->id_user);
-                                if(!$validaruser){
+                                //$validaruser = $this->negocio->validarUserRol($id,$u->id_user);
+                                //if(!$validaruser){
                                     ?>
                                     <option value="<?php echo $u->id_user;?>"><?php echo $u->user_nickname ;?></option>
                                     <?php
-                                }
+                                //}
                             }
                             ?>
                         </select>

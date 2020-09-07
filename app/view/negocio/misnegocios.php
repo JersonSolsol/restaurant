@@ -18,7 +18,6 @@
             <!-- Small boxes (Stat box) -->
                 <div class="row">
                     <!-- ./col -->
-
                     <?php
                     if(!empty($mostrarnegocioUser)){
                         foreach ($mostrarnegocioUser as $m) {

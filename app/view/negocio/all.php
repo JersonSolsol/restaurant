@@ -61,7 +61,7 @@
                             <td>X:<?php echo $m->negocio_coordenadas_X;?>, Y:<?php echo $m->negocio_coordenadas_Y;?></td>
                             <td><?php echo $m->negocio_ruc;?></td>                         
                             <td><?php echo $m->negocio_telefono;?></td>
-                            <td><a type="button" class="btn btn-xs btn-primary btn" href="<?php echo _SERVER_ . 'Negocio/edit/' . $m->id_negocio;?>" ><i class="fa fa-pencil"></i> Editar Negocios</a><a type="button" class="btn btn-xs btn-info btne" href="<?php echo _SERVER_ . 'Negocio/gestionar/' . $m->id_negocio;?>" ><i class="fa fa-user"></i> Gestionar Usuarios</a><a type="button" class="btn btn-xs btn-info btne" href="<?php echo _SERVER_ . 'Negocio/sucursal/' . $m->id_negocio;?>" ><i class="fa fa-user"></i> Gestionar Sucursal</a><a type="button" class="btn btn-xs btn-danger" onclick="preguntarSiNo(<?php echo $m->id_negocio;?>)"><i class="fa fa-remove"></i> Eliminar</a></td>
+                <td><a type="button" class="btn btn-xs btn-primary btn" href="<?php echo _SERVER_ . 'Negocio/edit/' . $m->id_negocio;?>" ><i class="fa fa-pencil"></i> Editar Negocios</a><a type="button" class="btn btn-xs btn-info btne" href="<?php echo _SERVER_ . 'Negocio/gestionar/' . $m->id_negocio;?>" ><i class="fa fa-user"></i> Gestionar Usuarios</a><a type="button" class="btn btn-xs btn-info btne" href="<?php echo _SERVER_ . 'Negocio/sucursal/' . $m->id_negocio;?>" ><i class="fa fa-user"></i> Gestionar Sucursal</a><a type="button" class="btn btn-xs btn-danger" onclick="preguntarSiNo(<?php echo $m->id_negocio;?>)"><i class="fa fa-remove"></i> Eliminar</a></td>
                         </tr>
                         <?php
                         $a++;
