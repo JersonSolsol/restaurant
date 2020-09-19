@@ -19,7 +19,7 @@ function quitarProducto(cod) {
         data : cadena,
         success:function (r) {
             if(r==1){
-                alertify.success('Producto Agregado');
+                alertify.success('Producto Eliminado');
                 $('#table_products').load(urlweb + 'Sell/table_products');
             } else {
                 alertify.error('Hubo Un Error');
@@ -70,7 +70,7 @@ function anular(id_saleproduct){
         data : cadena,
         success:function (r) {
             if(r!=2){
-                alertify.success('Venta Realizada');
+                alertify.success('Venta Anuladad');
                 location.href = urlweb + 'Sell/viewhistory/';
             } else {
                 alertify.error('No se pudo anular la venta');

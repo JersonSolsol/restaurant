@@ -41,7 +41,7 @@
                         <td>s/. <?php echo $p[3];?></td>
                         <td><?php echo $p[4];?></td>
                         <td>s/. <?php echo $subtotal;?></td>
-                        <td><a type="button" class="btn btn-xs btn-warning btne" onclick="quitarProducto(<?php echo $p[0];?>)" ><i class="fa fa-times"></i> Quitar</a></td>
+                        <td><a type="button" class="btn btn-xs btn-warning btne" onclick="quitarProducto(<?php echo $p->id_pedido;?>)" ><i class="fa fa-times"></i> Quitar</a></td>
                     </tr>
                     <?php
                 }

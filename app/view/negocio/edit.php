@@ -106,3 +106,66 @@
 </div>
 <script src="<?php echo _SERVER_ . _JS_;?>domain.js"></script>
 <script src="<?php echo _SERVER_ . _JS_;?>negocio.js"></script>
+
+<script>
+    $(document).ready(function(){
+        $("#negocio_nombre").on('paste', function(e){
+            e.preventDefault();
+            alert('Esta acción está prohibida');
+        })
+        $("#negocio_nombre").on('copy', function(e){
+            e.preventDefault();
+            alert('Esta acción está prohibida');
+        })
+
+
+        $("#negocio_direccion").on('paste', function(e){
+            e.preventDefault();
+            alert('Esta acción está prohibida');
+        })
+        $("#negocio_direccion").on('copy', function(e){
+            e.preventDefault();
+            alert('Esta acción está prohibida');
+        })
+
+
+        $("#negocio_coordenadas_X").on('paste', function(e){
+            e.preventDefault();
+            alert('Esta acción está prohibida');
+        })
+        $("#negocio_coordenadas_X").on('copy', function(e){
+            e.preventDefault();
+            alert('Esta acción está prohibida');
+        })
+
+
+        $("#negocio_coordenadas_Y").on('paste', function(e){
+            e.preventDefault();
+            alert('Esta acción está prohibida');
+        })
+        $("#negocio_coordenadas_Y").on('copy', function(e){
+            e.preventDefault();
+            alert('Esta acción está prohibida');
+        })
+
+        $("#negocio_ruc").on('paste', function(e){
+            e.preventDefault();
+            alert('Esta acción está prohibida');
+        })
+        $("#negocio_ruc").on('copy', function(e){
+            e.preventDefault();
+            alert('Esta acción está prohibida');
+        })
+
+        $("#negocio_telefono").on('paste', function(e){
+            e.preventDefault();
+            alert('Esta acción está prohibida');
+        })
+        $("#negocio_telefono").on('copy', function(e){
+            e.preventDefault();
+            alert('Esta acción está prohibida');
+        })
+
+    });
+
+</script>

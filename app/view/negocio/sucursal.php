@@ -155,7 +155,10 @@
         $("#btn_editar_sucursal").hide();
         $("#btn_cancelar").hide();
 
+
     });
+
+
     function activarEdicion(id_sucursal,nombre,direccion, ciudad, coor_X,coor_Y,ruc,telefono) {
         $("#btn_agregar_sucursal").hide();
         $("#btn_editar_sucursal").show();
@@ -192,6 +195,69 @@
         $("#sucursal_ciudad option[value="+ valor +"]").attr("selected",false);
         $("#sucursal_ciudad option[value=0]").attr("selected",true);
     }
+
+    $(document).ready(function(){
+    $("#sucursal_nombre").on('paste', function(e){
+        e.preventDefault();
+        alert('Esta acción está prohibida');
+        })
+    $("#sucursal_nombre").on('copy', function(e){
+            e.preventDefault();
+            alert('Esta acción está prohibida');
+        })
+
+
+    $("#sucursal_direccion").on('paste', function(e){
+        e.preventDefault();
+        alert('Esta acción está prohibida');
+    })
+    $("#sucursal_direccion").on('copy', function(e){
+        e.preventDefault();
+        alert('Esta acción está prohibida');
+    })
+
+
+    $("#sucursal_coordenadas_X").on('paste', function(e){
+        e.preventDefault();
+        alert('Esta acción está prohibida');
+    })
+    $("#sucursal_coordenadas_X").on('copy', function(e){
+        e.preventDefault();
+        alert('Esta acción está prohibida');
+    })
+
+
+    $("#sucursal_coordenadas_Y").on('paste', function(e){
+        e.preventDefault();
+        alert('Esta acción está prohibida');
+    })
+    $("#sucursal_coordenadas_Y").on('copy', function(e){
+        e.preventDefault();
+        alert('Esta acción está prohibida');
+    })
+
+    $("#sucursal_ruc").on('paste', function(e){
+        e.preventDefault();
+        alert('Esta acción está prohibida');
+    })
+    $("#sucursal_ruc").on('copy', function(e){
+        e.preventDefault();
+        alert('Esta acción está prohibida');
+    })
+
+    $("#sucursal_telefono").on('paste', function(e){
+        e.preventDefault();
+        alert('Esta acción está prohibida');
+    })
+    $("#sucursal_telefono").on('copy', function(e){
+        e.preventDefault();
+        alert('Esta acción está prohibida');
+    })
+
+
+    });
+
+
 
 
     

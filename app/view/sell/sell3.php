@@ -287,9 +287,9 @@
 
     function agregarProductoZ() {
         var cod = $('#id_productforsaleb').val();
-        var cant = $("#product_cantb").val();
-        var precio = $("#product_priceb").val();
-        var stock = $("#product_stockb").val();
+        var cant = $("#product_cantb").val() * 1;
+        var precio = $("#product_priceb").val() * 1;
+        var stock = $("#product_stockb").val() * 1;
         var cadena = "codigo=" + cod +
             "&producto=" + productfull +
             "&unids=" + unid +

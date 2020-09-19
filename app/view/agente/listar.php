@@ -1,3 +1,4 @@
+
 <?php
 /**
  * Created by PhpStorm
@@ -27,10 +28,10 @@
         <!-- Main row -->
         <div class="row">
             <div class="col-xs-10">
-                <center><h2>Lista de Negocios Registrados</h2></center>
+                <center><h2>Lista de Agente Registrados</h2></center>
             </div>
             <div class="col-xs-2">
-                <center><a class="btn btn-block btn-success btn-sm" href="<?php echo _SERVER_;?>Negocio/add" ><i class="fa fa-plus"></i> Agregar Nuevo Negocio</a></center>
+                <center><a class="btn btn-block btn-success btn-sm" href="<?php echo _SERVER_;?>Agente/agregarAgente" ><i class="fa fa-plus"></i> Agregar Nuevo Agente</a></center>
             </div>
         </div>
         <br>
@@ -43,8 +44,6 @@
                         <th>ID</th>
                         <th>Nombre</th>
                         <th>Dirección</th>
-                        <th>Coordenadas</th>
-                        <th>RUC</th>   
                         <th>Telefono</th>
                         <th>Accion</th>
                     </tr>
@@ -52,16 +51,14 @@
                     <tbody>
                     <?php
                     $a = 1;
-                    foreach ($negocio as $m){
+                    foreach ($agente as $ag){
                         ?>
                         <tr>
                             <td><?php echo $a;?></td>
-                            <td> <?php echo $m->negocio_nombre;?></td>
-                            <td><?php echo $m->negocio_direccion;?></td>
-                            <td>X:<?php echo $m->negocio_coordenadas_X;?>, Y:<?php echo $m->negocio_coordenadas_Y;?></td>
-                            <td><?php echo $m->negocio_ruc;?></td>                         
-                            <td><?php echo $m->negocio_telefono;?></td>
-                            <td><a type="button" class="btn btn-xs btn-primary btn" href="<?php echo _SERVER_ . 'Negocio/edit/' . $m->id_negocio;?>" ><i class="fa fa-pencil"></i> Editar Negocios</a><a type="button" class="btn btn-xs btn-info btne" href="<?php echo _SERVER_ . 'Negocio/gestionar/' . $m->id_negocio;?>" ><i class="fa fa-user"></i> Gestionar Usuarios</a><a type="button" class="btn btn-xs btn-info btne" href="<?php echo _SERVER_ . 'Negocio/sucursal/' . $m->id_negocio;?>" ><i class="fa fa-user"></i> Gestionar Sucursal</a><a type="button" class="btn btn-xs btn-danger" onclick="preguntarSiNo(<?php echo $m->id_negocio;?>)"><i class="fa fa-remove"></i> Eliminar</a></td>
+                            <td> <?php echo $ag->agente_nombre;?></td>
+                            <td><?php echo $ag->agente_direccion;?></td>
+                            <td><?php echo $ag->agente_telefono;?></td>
+                            <td><a type="button" class="btn btn-xs btn-primary btn" href="<?php echo _SERVER_ . 'Agente/editarAgente/' . $ag->id_agente;?>" ><i class="fa fa-pencil"></i> Editar Agente</a><a type="button" class="btn btn-xs btn-danger" onclick="preguntarSiNoAgente(<?php echo $ag->id_agente;?>)"><i class="fa fa-remove"></i> Eliminar</a></td>
                         </tr>
                         <?php
                         $a++;
@@ -77,4 +74,4 @@
     <!-- /.content -->
 </div>
 <script src="<?php echo _SERVER_ . _JS_;?>domain.js"></script>
-<script src="<?php echo _SERVER_ . _JS_;?>negocio.js"></script>
+<script src="<?php echo _SERVER_ . _JS_;?>agente.js"></script>

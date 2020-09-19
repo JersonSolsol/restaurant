@@ -45,14 +45,15 @@
             <div class="col-xs-12">
                 <div class="col-xs-1"></div>
                 <div class="col-xs-2">
+                    <input type="hidden" id="id_mesa" value="<?= $id; ?>">
                     <div class="form-group">
                         <label class="col-form-label"> Pedidos: </label>
-                        <select class="form-control" id="select_pedidos">
-                            <option value="" onchange="buscar_producto()">Elegir Pedido</option>
+                        <select class="form-control" onchange="buscar_producto()" id="select_pedidos">
+                            <option value="" >Elegir Pedido</option>
                             <?php
                             foreach($listarproductos as $lp){
                                 ?>
-                                <option value="<?php echo $lp->id_product;?>"><?php echo $lp->product_name;?></option>
+                                <option value="<?php echo $lp->id_productforsale;?>"><?php echo $lp->product_name;?></option>
                                 <?php
                             }
                             ?>
@@ -61,15 +62,15 @@
                 </div>
                 <div class="col-xs-2">
                     <label for="client_address">Cantidad:</label>
-                    <input class="form-control" type="text" id="product_cantb" onchange="onchangeundZ()" value="1" onkeypress="return valida(event);">
+                    <input class="form-control" onkeypress="return solonumeros(event)" type="text" id="product_cantb" onchange="onchangeundZ()" value="1" onkeypress="return valida(event);">
                 </div>
                 <div class="col-xs-2">
                     <label for="client_address">Precio(S/.):</label><br>
-                    <input class="form-control" type="text"  onchange="onchangeundpriceZ()" id="product_priceb">
+                    <input class="form-control" onkeypress="return solonumeros(event)" type="text"  onchange="onchangeundpriceZ()" id="product_priceb">
                 </div>
                 <div class="col-xs-2">
                     <label for="client_address">Total(S/.):</label><br>
-                    <input class="form-control" type="text" id="product_totalb" onchange="onchangetotalpriceZ()">
+                    <input class="form-control" onkeypress="return solonumeros(event)" type="text" id="product_totalb" onchange="onchangetotalpriceZ()">
                 </div>
                 <div class="col-xs-3">
                     <br>
@@ -126,6 +127,7 @@
                         unid = "";
                     } else {
                         var productoinfo = r.split('|');
+                        $('#select_pedidos').val();
                         $('#product_priceb').val(productoinfo[5]);
                         $('#product_totalb').val(productoinfo[5]);
                         $('#product_cantb').val(1);
@@ -163,15 +165,20 @@
     }
     
     function agregarPedido() {
-            var nombre = $("#select_pedidos").val();
+            var nombre = $("#select_pedidos option:selected").text();
+            var id_nombre = $("#select_pedidos").val();
             var cantidad = $("#product_cantb").val();
             var precio = $("#product_priceb").val();
             var product_totalb = $("#product_totalb").val();
+            var id_productforsale = $("#select_pedidos").val();
 
             var cadena = "nombre=" + nombre +
                 "&cantidad=" + cantidad +
                 "&precio=" + precio +
+                "&id_productforsale=" + id_productforsale +
+                "&id_nombre=" + id_nombre +
                 "&product_totalb=" + product_totalb;
+
 
                 $.ajax({
                     type:"POST",
@@ -180,8 +187,8 @@
                     success:function (r) {
                         switch (r) {
                             case "1":
-                                alertify.success("¡Guardado!");
-                                location.href = urlweb +  'Pedido/tabla_prodcutos/'+ id;
+                                alertify.success("¡PRODUCTO AGREGADO!");
+                                $('#tabla_productos').load(urlweb + 'Pedido/tabla_productos');
                                 break;
                             case "2":
                                 alertify.error('Hubo Un Error');
