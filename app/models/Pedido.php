@@ -305,6 +305,58 @@ class Pedido
         return $result;
     }
 
+    public function listSalesPedidosMelendez($fecha_i, $fecha_f, $usuario, $estado_pedido){
+        try {
+            $sql = 'select * from pedido p inner join user u on p.id_user = u.id_user inner join client c on p.id_client = c.id_client WHERE p.pedido_datetime BETWEEN ? and ? and p.id_user=? and p.pedido_cancelar = ?';
+            $stm = $this->pdo->prepare($sql);
+            $stm->execute([$fecha_i, $fecha_f, $usuario, $estado_pedido]);
+            $result = $stm->fetchAll();
+        } catch (Exception $e){
+            $this->log->insert($e->getMessage(), get_class($this).'|'.__FUNCTION__);
+            $result = [];
+        }
+        return $result;
+    }
+
+    public function listSalesPedidosSinUser($fecha_i, $fecha_f, $estado_pedido){
+        try {
+            $sql = 'select * from pedido p inner join user u on p.id_user = u.id_user inner join client c on p.id_client = c.id_client WHERE p.pedido_datetime BETWEEN ? and ? and p.pedido_cancelar = ?';
+            $stm = $this->pdo->prepare($sql);
+            $stm->execute([$fecha_i, $fecha_f, $estado_pedido]);
+            $result = $stm->fetchAll();
+        } catch (Exception $e){
+            $this->log->insert($e->getMessage(), get_class($this).'|'.__FUNCTION__);
+            $result = [];
+        }
+        return $result;
+    }
+
+    public function listSalesPedidosSinEstado($fecha_i, $fecha_f, $usuario){
+        try {
+            $sql = 'select * from pedido p inner join user u on p.id_user = u.id_user inner join client c on p.id_client = c.id_client WHERE p.pedido_datetime BETWEEN ? and ? and p.id_user = ?';
+            $stm = $this->pdo->prepare($sql);
+            $stm->execute([$fecha_i, $fecha_f, $usuario]);
+            $result = $stm->fetchAll();
+        } catch (Exception $e){
+            $this->log->insert($e->getMessage(), get_class($this).'|'.__FUNCTION__);
+            $result = [];
+        }
+        return $result;
+    }
+
+    public function listSalesPedidosMostrarTodo($fecha_i, $fecha_f){
+        try {
+            $sql = 'select * from pedido p inner join user u on p.id_user = u.id_user inner join client c on p.id_client = c.id_client WHERE p.pedido_datetime BETWEEN ? and ?';
+            $stm = $this->pdo->prepare($sql);
+            $stm->execute([$fecha_i, $fecha_f]);
+            $result = $stm->fetchAll();
+        } catch (Exception $e){
+            $this->log->insert($e->getMessage(), get_class($this).'|'.__FUNCTION__);
+            $result = [];
+        }
+        return $result;
+    }
+
     public function listarCobro($id){
         try {
             $sql = 'select * from pedido where id_pedido = ? limit 1';
@@ -428,6 +480,20 @@ class Pedido
         return $result;
 
 
+    }
+
+    public function listarEstado(){
+        try{
+            $sql = 'select * from pedido p INNER JOIN pedido_detalle pd ON p.id_pedido = pd.id_pedido where p.id_pedido = ?';
+            $stm = $this->pdo->prepare($sql);
+            $stm->execute();
+            $result = $stm->fetchAll();
+
+        } catch (Exception $e){
+            $this->log->insert($e->getMessage(), get_class($this).'|'.__FUNCTION__);
+            $result = [];
+        }
+        return $result;
     }
 
 }

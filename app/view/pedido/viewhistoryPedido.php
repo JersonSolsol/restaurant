@@ -32,8 +32,45 @@
         <br>
         <!-- /.row (main row) -->
         <div class="row">
+            <div class="col-md-3">
+                <label for="fecha_i">Desde:</label>
+                <input type="date" class="form-control" id="fecha_i" value="<?php echo $fecha;?>">
+            </div>
+            <div class="col-md-3">
+                <label for="fecha_f">Hasta:</label>
+                <input type="date" class="form-control" id="fecha_f" value="<?php echo $fecha;?>">
+            </div>
+            <div class="col-xs-2">
+                <div class="form-group">
+                    <label class="col-form-label">Usuario:</label>
+                    <select class="form-control" id= "usuario">
+                        <option value="">Elegir Usuario</option>
+                        <?php
+                        foreach($usuario as $u){
+                            ?>
+                            <option value="<?php echo $u->id_user;?>"><?php echo $u->user_nickname ;?></option>
+                            <?php
+                        }
+                        ?>
+                    </select>
+                </div>
+            </div>
+            <div class="col-xs-2">
+                <div class="form-group">
+                    <label class="col-form-label">Estado:</label>
+                    <select class="form-control" id= "estado_pedido">
+                        <option value="">Elegir Estado</option>
+                        <option value="0">PENDIENTE</option>
+                        <option value="1">PAGADO</option>
+                    </select>
+                </div>
+            </div>
+            <br>
+            <div class="col-xs-2">
+                <a><button class="btn btn-success" onchange="search_pedido()"><i class="fa fa-search"></i> BUSCAR</button></a>
+            </div>
             <div class="col-lg-12">
-                <table id="example2" class="table table-bordered table-hover">
+                <table id="" class="table table-bordered table-hover">
                     <thead class="text-capitalize">
                     <tr>
                         <th>N°</th>
@@ -47,48 +84,33 @@
                         <th>Detalles</th>
                     </tr>
                     </thead>
-                    <tbody>
-                    <?php
-                    $totalsales = count($salesP);
-                    foreach ($salesP as $m){
-                        $mostrar = "<a class=\"btn btn-xs btn-outline-danger\">PENDIENTE DE PAGO</a>";
-                        
-                        if($m->pedido_cancelar == 1){
-                            $mostrar = "<a class=\"btn btn-xs btn-outline-success\">PAGADO</a>";
-                            
-                        }
-                        ?>
-                        <tr>
-                            <td><?php echo $totalsales;?></td>
-                            <td><?php echo $m->pedido_datetime;?></td>
-                            <td><?php echo $m->pedido_correlativo;?></td>
-                            <td><?php echo $m->user_nickname;?></td>
-                            <td><?php echo $m->client_name;?></td>
-                            <td><?php echo $m->client_number;?></td>
-                            <td>s/. <?php echo $m->pedido_total;?></td>
-                            <td><?php echo $mostrar;?></td>
-
-                            <td>
-                                <?php
-                                if($m->pedido_cancelar == 0){
-                                ?>
-                                <a type="button" class= "btn btn-xs btn-danger btne " id="pagar" onchange="pagar_pedido()" href="<?php echo _SERVER_ . 'Pedido/viewpedido/' . $m->id_pedido;?>" target="_blank" >PAGAR</a>
-                                <?php
-                                } else{
-                                ?> 
-                                <a type="button" class="btn btn-xs btn-primary btne" id="detalle" onchange="ver_detalle()" href="<?php echo _SERVER_ . 'Pedido/viewpedido/' . $m->id_pedido;?>" target="_blank" >Ver Detalle</a>
-                                <?php
-                                }
-                                ?>
-                            </td>
-                                
-                        </tr>
-                        <?php
-                        $totalsales--;
-                    }
-                    ?>
+                    <tbody id="tabla_registro_pedidos">
+                    <tr><td colspan="9">Seleccione un registro</td></tr>
                     </tbody>
                 </table>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <form method="post" target="_blank" action="<?php echo _SERVER_;?>Pedido/kardex_por_producto_PDF">
+                    <input type="hidden" name="fecha_i_f" id="fecha_i_f" value="">
+                    <input type="hidden" name="fecha_f_f" id="fecha_f_f" value="">
+                    <input type="hidden" name="id_user" id="id_user" value="">
+                    <input type="hidden" name="estado_pedido_p" id="estado_pedido_p" value="">
+        <center><a  href="<?php echo _SERVER_;?>/Pedido/pedidoPDF" target="_blank" class="btn btn-primary"><i class="fa fa-download"></i> Imprimir Reporte</a><a id="btnExportar" onclick="descargarExcel" target="_blank" class="btn btn-success"><i class="fa fa-download"></i> Generar Excel</a></center>
+
+                </form>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12 col-xs-12">
+                <div class="col-xs-6">
+
+                </div>
+                <div class="col-xs-6">
+
+                </div>
             </div>
         </div>
 
@@ -98,24 +120,23 @@
 <script src="<?php echo _SERVER_ . _JS_;?>domain.js"></script>
 <script src="<?php echo _SERVER_ . _JS_;?>pedido.js"></script>
 
+
 <script>
-
-    $(document).ready(function(){
-        if ($m->pedido_cancelar == 0){
-            $("#detalle").hide();
-        } else{
-            $("#pagar").show();
-        }
-     
-
+    $(function () {
+        $("#example2").DataTable();
     });
+    function search_pedido() {
+        var fecha_i = $("#fecha_i").val();
+        var fecha_f = $("#fecha_f").val();
+        var usuario = $("#usuario").val();
+        var estado_pedido = $("#estado_pedido").val();
+        $("#fecha_i_f").val(fecha_i);
+        $("#fecha_f_f").val(fecha_f);
+        $("#id_user").val(usuario);
+        $("#estado_pedido_p").val(estado_pedido);
+        $.post("<?php echo _SERVER_;?>Pedido/search_pedido", { fecha_i: fecha_i,fecha_f: fecha_f, usuario:usuario, estado_pedido:estado_pedido}, function(data){
+            $("#tabla_registro_pedidos").html(data);
+        });
+    }
 
-    function pagar_pedido() {
-        
-    }
-    
-    function ver_detalle() {
-        
-    }
-    
 </script>

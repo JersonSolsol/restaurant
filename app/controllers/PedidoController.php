@@ -16,6 +16,7 @@ require 'app/models/Client.php';
 require 'app/models/Correlative.php';
 require 'app/models/Active.php';
 require 'app/models/Inventory.php';
+require 'app/models/Turn.php';
 
 class PedidoController{
     private $log;
@@ -41,6 +42,7 @@ class PedidoController{
         $this->ciudad = new Ciudad();
         $this->usuario = new User();
         $this->rol = new Role();
+        $this->turn = new Turn();
         $this->crypt = new Crypt();
         $this->pedido = new Pedido();
         $this->client = new Client();
@@ -125,7 +127,9 @@ class PedidoController{
             $navs = $this->nav->listMenu($this->crypt->decrypt($_SESSION['role'],_PASS_));
             //Cargamos Productos
             $salesP = $this->pedido->listSalesPedidos();
-
+            $usuario = $this->usuario->listarUsuario();
+            $estado = $this->pedido->listarEstado();
+            $fecha = date("Y-m-d");
             require _VIEW_PATH_ . 'header.php';
             require _VIEW_PATH_ . 'navbar.php';
             require _VIEW_PATH_ . 'pedido/viewhistoryPedido.php';
@@ -137,6 +141,31 @@ class PedidoController{
             echo "<script language=\"javascript\">window.location.href=\"". _SERVER_ ."\";</script>";
         }
 
+    }
+
+    public function search_pedido(){
+        $fecha_i = $_POST['fecha_i'];
+        $fecha_f = $_POST['fecha_f'];
+        $explode = explode("-",$fecha_f);
+        $sum = $explode[2] + 1;
+        $fecha_f = $explode[0]."-".$explode[1]."-".$sum;
+        $usuario = $_POST['usuario'];
+        $estado_pedido = $_POST['estado_pedido'];
+        $list = "";
+        $salesP = $this->pedido->listSalesPedidos();
+
+        foreach($salesP as $m){
+            $list.="<tr style='color: blue;'>
+                <td>".$m->stocklog_date."</td>
+                <td>".$m->stocklog_guide."</td>
+                <td>".$m->id_stocklog."</td>
+                <td>".$m->stocklog_added."</td>
+                <td></td>
+                <td></td>
+            </tr>";
+        }
+
+        echo $list;
     }
 
     public function viewPedido(){
@@ -185,6 +214,55 @@ class PedidoController{
 
     }
 
+    public function melendez(){
+        try{
+            $this->nav = new Navbar();
+            $navs = $this->nav->listMenu($this->crypt->decrypt($_SESSION['role'],_PASS_));
+            $usuarios = $this->usuario->listarUsuario();
+            $datos = false;
+            $fecha = date("Y-m-d");
+            if(isset($_POST['enviar'])){
+                $datos = true;
+                $fecha_i= $_POST['fecha_i'];
+                $fecha_f= $_POST['fecha_f'];
+                $usuario= $_POST['usuario'];
+                $estado_pedido= $_POST['estado_pedido'];
+                if($usuario == "" && $estado_pedido == ""){
+                    $salesP = $this->pedido->listSalesPedidosMostrarTodo($fecha_i, $fecha_f);
+                    $fecha_filtro_i = $fecha_i;
+                    $fecha_filtro_f = $fecha_f;
+
+                }else if($usuario == ""){
+                    $salesP = $this->pedido->listSalesPedidosSinUser($fecha_i, $fecha_f, $estado_pedido);
+                    $fecha_filtro_i = $fecha_i;
+                    $fecha_filtro_f = $fecha_f;
+
+                }else if($estado_pedido == "" ){
+                    $salesP = $this->pedido->listSalesPedidosSinEstado($fecha_i, $fecha_f, $usuario);
+                    $fecha_filtro_i = $fecha_i;
+                    $fecha_filtro_f = $fecha_f;
+
+                }
+                else{
+                    $salesP = $this->pedido->listSalesPedidosMelendez($fecha_i, $fecha_f, $usuario, $estado_pedido);
+                    $fecha_filtro_i = $fecha_i;
+                    $fecha_filtro_f = $fecha_f;
+
+                }
+            }
+            require _VIEW_PATH_ . 'header.php';
+            require _VIEW_PATH_ . 'navbar.php';
+            require _VIEW_PATH_ . 'pedido/melendez.php';
+            require _VIEW_PATH_ . 'footer.php';
+        } catch (Throwable $e){
+            $this->log->insert($e->getMessage(), get_class($this).'|'.__FUNCTION__);
+            echo "<script language=\"javascript\">alert(\"Error Al Mostrar Contenido. Redireccionando Al Inicio\");</script>";
+            echo "<script language=\"javascript\">window.location.href=\"". _SERVER_ ."\";</script>";
+        }
+
+    }
+
+
     public function editar_pedido(){
         try{
             $this->nav = new Navbar();
@@ -217,6 +295,67 @@ class PedidoController{
     public function tabla_productos2(){
         $id = $_GET['id'] ?? 0;
         require _VIEW_PATH_ . 'pedido/tabla_productos2.php';
+    }
+
+    public function pedidoPDF(){
+        try{
+            $usuarios = $this->usuario->listarUsuario();
+            //$fecha = date("Y-m-d");
+
+            $fecha_i= $_POST['fecha_i'];
+            $fecha_f= $_POST['fecha_f'];
+            $usuario= $_POST['usuario'];
+            $estado_pedido= $_POST['estado_pedido'];
+            if($usuario == "" && $estado_pedido == ""){
+                $salesP = $this->pedido->listSalesPedidosMostrarTodo($fecha_i, $fecha_f);
+
+            }else if($usuario == ""){
+                $salesP = $this->pedido->listSalesPedidosSinUser($fecha_i, $fecha_f, $estado_pedido);
+
+            }else if($estado_pedido == "" ){
+                $salesP = $this->pedido->listSalesPedidosSinEstado($fecha_i, $fecha_f, $usuario);
+            }
+            else{
+                $salesP = $this->pedido->listSalesPedidosMelendez($fecha_i, $fecha_f, $usuario, $estado_pedido);
+            }
+
+            if(isset($_SESSION['turno'])){
+                $turn = $this->active->getTurnactiveall_id($_SESSION['turno']);
+            } else {
+                $turn = $this->active->getTurnactiveall();
+            }
+
+            if($turn == false){
+                if(isset($_SESSION['turno'])){
+                    $fecha = $_SESSION['turno'];
+                    $this->nav = new Navbar();
+                    $navs = $this->nav->listMenu($this->crypt->decrypt($_SESSION['role'],_PASS_));
+                    require _VIEW_PATH_ . 'header.php';
+                    require _VIEW_PATH_ . 'navbar.php';
+                    require _VIEW_PATH_ . 'report/noturn.php';
+                    require _VIEW_PATH_ . 'footer.php';
+                } else {
+                    $fecha = date("Y-m-d");
+                    $this->nav = new Navbar();
+                    $navs = $this->nav->listMenu($this->crypt->decrypt($_SESSION['role'],_PASS_));
+                    require _VIEW_PATH_ . 'header.php';
+                    require _VIEW_PATH_ . 'navbar.php';
+                    require _VIEW_PATH_ . 'report/noturn.php';
+                    require _VIEW_PATH_ . 'footer.php';
+                }
+
+            } else {
+                $fecha = $turn->turn_datestart;
+                $products = $this->turn->listP();
+                require _VIEW_PATH_ . 'pedido/pedido_PDF.php';
+            }
+
+        } catch (Throwable $e){
+            $this->log->insert($e->getMessage(), get_class($this).'|'.__FUNCTION__);
+            echo "<script language=\"javascript\">alert(\"Error Al Mostrar Contenido. Redireccionando Al Inicio\");</script>";
+            echo "<script language=\"javascript\">window.location.href=\"". _SERVER_ ."\";</script>";
+        }
+
     }
 
 
@@ -447,6 +586,7 @@ class PedidoController{
         }
         echo $result;
     }
+
 
 
 }
